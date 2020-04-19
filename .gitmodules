@@ -10,3 +10,6 @@
 [submodule "vim/.vim/plugged/vim-airline"]
 	path = vim/.vim/plugged/vim-airline
 	url = https://github.com/vim-airline/vim-airline.git
+[submodule "vim/.vim/plugged/vim-surround"]
+	path = vim/.vim/plugged/vim-surround
+	url = https://github.com/tpope/vim-surround.git
