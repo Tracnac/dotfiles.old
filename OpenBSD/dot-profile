@@ -1,0 +1,25 @@
+# $OpenBSD: dot.profile,v 1.9 2010/12/13 12:54:31 millert Exp $
+#
+# sh/ksh initialization
+
+echo "Enter .profile"
+PATH=/sbin:/usr/sbin:/bin:/usr/bin:/usr/X11R6/bin:/usr/local/sbin:/usr/local/bin
+export PATH
+umask 022
+
+case "$-" in
+*i*)    # interactive shell
+	if [ -x /usr/bin/tset ]; then
+		if [ X"$XTERM_VERSION" = X"" ]; then
+			eval `/usr/bin/tset -sQ '-munknown:?vt220' $TERM`
+		else
+			eval `/usr/bin/tset -IsQ '-munknown:?vt220' $TERM`
+		fi
+	fi
+	;;
+esac
+export TERM=screen-256color
+export LANG=en_US.UTF-8
+export LC_CTYPE=en_US.UTF-8
+
+export ENV=$HOME/.kshrc
