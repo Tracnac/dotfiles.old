@@ -1,0 +1,71 @@
+# Unbind all
+unbind-key all
+unbind-mouse all 
+ 
+ # Set default Xft(3) font
+ fontname "sans-serif:pixelsize=14:bold"
+
+ # Turn on sticky-group mode
+ sticky yes
+
+ # Any entry here is shown in the application menu
+ # command firefox firefox
+ # command st "/usr/local/bin/st"
+
+ # Autogroup definitions
+
+ # Ignore programs by that name by not drawing borders around them.
+ # ignore xclock
+
+ # Key bindings
+bind-key 4-r restart
+bind-key 4-space "/usr/bin/rofi -show run"
+bind-key 4S-space "/usr/bin/rofi -show window"
+
+bind-key 4-Return "/usr/local/bin/st"
+
+bind-key 4-w window-close
+bind-key 4-s window-hide
+bind-key 4S-s group-toggle-all
+bind-key 4-f window-fullscreen
+bind-key 4-m window-maximize
+
+bind-key 4-h window-hmaximize
+bind-key 4S-h window-htile
+bind-key 4-v window-vmaximize
+bind-key 4S-v window-vtile
+
+bind-key 4-Up window-move-up-big
+bind-key 4-Down window-move-down-big
+bind-key 4-Left window-move-left-big
+bind-key 4-Right window-move-right-big
+
+bind-key 4S-Up window-snap-up
+bind-key 4S-Down window-snap-down
+bind-key 4S-Left window-snap-left
+bind-key 4S-Right window-snap-right
+
+bind-key 4-1 group-only-1
+bind-key 4-2 group-only-2
+bind-key 4-3 group-only-3
+bind-key 4-4 group-only-4
+bind-key 4-5 group-only-5
+bind-key 4-6 group-only-6
+bind-key 4-7 group-only-7
+bind-key 4-8 group-only-8
+bind-key 4-9 group-only-9
+
+bind-key 4S-1 window-movetogroup-1
+bind-key 4S-2 window-movetogroup-2
+bind-key 4S-3 window-movetogroup-3
+bind-key 4S-4 window-movetogroup-4
+bind-key 4S-5 window-movetogroup-5
+bind-key 4S-6 window-movetogroup-6
+bind-key 4S-7 window-movetogroup-7
+bind-key 4S-8 window-movetogroup-8
+bind-key 4S-9 window-movetogroup-9
+
+ # Mouse bindings
+ bind-mouse 4-1 window-move
+ bind-mouse 4-2 window-lower
+ bind-mouse 4-3 window-resize
