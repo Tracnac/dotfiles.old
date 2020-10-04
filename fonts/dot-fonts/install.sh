@@ -1,0 +1,3 @@
+#!/bin/sh
+
+wget https://github.com/belluzj/fantasque-sans/releases/download/v1.8.0/FantasqueSansMono-Normal.tar.gz
