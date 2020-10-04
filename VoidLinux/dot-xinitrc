@@ -1,0 +1,11 @@
+export _JAVA_AWT_WM_NONREPARENTING=1
+for i in `cat ~/.config/addpaths`
+do
+  export PATH=${PATH}:${i}
+done
+
+feh --bg-tile .wallpaper.jpeg
+sxhkd &
+# /usr/local/bin/slstatus > /tmp/xlog 2>&1 &
+# exec /home/ygalas/.bin/dwm
+exec /usr/bin/cwm

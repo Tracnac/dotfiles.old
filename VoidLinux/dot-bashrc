@@ -1,0 +1,18 @@
+# .bashrc
+
+# If not running interactively, don't do anything
+[[ $- != *i* ]] && return
+
+alias ls='ls --color=auto'
+alias sx='startx&exit'
+alias ica='while true; do xdotool click 1 && sleep 5 ; done'
+
+alias ovpn='sudo openvpn --daemon --config /etc/openvpn/NLFree01.ovpn'
+alias ssp='surf https://www.startpage.com &'
+
+alias git_dir='find . -name .git -prune -o -type d -empty -exec touch {}/.gitignore \;'
+
+alias hugo_post='cd /home/ygalas/Documents/Sites/devmobs.fr ; hugo new posts/draft.md'
+
+PS1='[\u: \W] λ '
+export _JAVA_AWT_WM_NONREPARENTING=1
