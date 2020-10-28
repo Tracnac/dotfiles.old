@@ -1,21 +1,6 @@
 [submodule "tmux/dot-tmux/plugins/tpm"]
 	path = tmux/dot-tmux/plugins/tpm
 	url = https://github.com/tmux-plugins/tpm
-[submodule "vim/dot-vim/plugged/vim-airline-themes"]
-	path = vim/dot-vim/plugged/vim-airline-themes
-	url = https://github.com/vim-airline/vim-airline-themes.git
-[submodule "vim/dot-vim/plugged/vim-airline"]
-	path = vim/dot-vim/plugged/vim-airline
-	url = https://github.com/vim-airline/vim-airline.git
-[submodule "vim/dot-vim/plugged/vim-surround"]
-	path = vim/dot-vim/plugged/vim-surround
-	url = https://github.com/tpope/vim-surround.git
 [submodule "vim/dot-vim/plugged/janet.vim"]
 	path = vim/dot-vim/plugged/janet.vim
   url = https://github.com/janet-lang/janet.vim.git
-[submodule "vim/dot-vim/plugged/rainbow"]
-	path = vim/dot-vim/plugged/rainbow
-  url = https://github.com/luochen1990/rainbow.git
-[submodule "vim/dot-vim/plugged/tmuxline.vim"]
-	path = vim/dot-vim/plugged/tmuxline.vim
-	url = https://github.com/edkolev/tmuxline.vim.git
