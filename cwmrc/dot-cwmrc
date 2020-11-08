@@ -2,18 +2,34 @@
 unbind-key all
 unbind-mouse all 
  
+# Color
+borderwidth 1
+color activeborder "#FFD866"
+color inactiveborder "#444444"
+
 # Set default Xft(3) font
-fontname "sans-serif:pixelsize=14:bold"
+fontname "Fantasque Sans Mono:pixelsize=14:bold"
 
 # Turn on sticky-group mode
 sticky yes
 
+# Any entry here is shown in the application menu
+# command firefox firefox
+# command st "/usr/local/bin/st"
+
+# Autogroup definitions
+
+# Ignore programs by that name by not drawing borders around them.
+# ignore xclock
+
 # Key bindings
 bind-key 4-r restart
-bind-key 4-space "rofi -show run"
-bind-key 4S-space "rofi -show window"
+bind-key 4-space "/usr/bin/rofi -show drun"
+bind-key 4S-space "/usr/bin/rofi -show run"
+bind-key 4C-space "/usr/bin/rofi -show window"
 
-bind-key 4-Return "st"
+bind-key 4-Return "/usr/local/bin/st"
+bind-key 4-i ".bin/date.sh"
 
 bind-key 4-w window-close
 bind-key 4-s window-hide
@@ -56,7 +72,7 @@ bind-key 4S-7 window-movetogroup-7
 bind-key 4S-8 window-movetogroup-8
 bind-key 4S-9 window-movetogroup-9
 
- # Mouse bindings
- bind-mouse 4-1 window-move
- bind-mouse 4-2 window-lower
- bind-mouse 4-3 window-resize
+# Mouse bindings
+bind-mouse 4-1 window-move
+bind-mouse 4-2 window-lower
+bind-mouse 4-3 window-resize
