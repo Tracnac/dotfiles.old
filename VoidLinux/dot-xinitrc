@@ -6,6 +6,4 @@ done
 
 feh --bg-tile .wallpaper.jpeg
 sxhkd &
-# /usr/local/bin/slstatus > /tmp/xlog 2>&1 &
-# exec /home/ygalas/.bin/dwm
 exec /usr/bin/cwm
