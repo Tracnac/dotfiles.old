@@ -7,6 +7,8 @@ sxhkd &
 # Add xprop mouse logic
 # xinput --list --id-only "$(xinput --list --name-only | grep Corsair)"
 # xinput --set-prop 15 309 -0.8
+# Need specific setup
+# picom --backend glx --vsync --detect-client-opacity --dbus -CGf
 
 hsetroot -tile ~/.wallpaper.jpeg
 exec cwm
