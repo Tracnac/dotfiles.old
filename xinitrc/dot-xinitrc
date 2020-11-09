@@ -1,0 +1,12 @@
+#!/bin/sh
+
+sxhkd &
+
+# Add xrandr logic
+# xrandr --output DP1 --left-of eDP1
+# Add xprop mouse logic
+# xinput --list --id-only "$(xinput --list --name-only | grep Corsair)"
+# xinput --set-prop 15 309 -0.8
+
+hsetroot -tile ~/.wallpaper.jpeg
+exec cwm
