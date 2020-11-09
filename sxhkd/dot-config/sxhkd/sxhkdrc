@@ -1,3 +1,5 @@
+XF86ScreenSaver
+        slock
 XF86AudioMute 
         amixer -q set 'Master' toggle
 XF86AudioLowerVolume

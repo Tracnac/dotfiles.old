@@ -1,9 +1,0 @@
-export _JAVA_AWT_WM_NONREPARENTING=1
-for i in `cat ~/.config/addpaths`
-do
-  export PATH=${PATH}:${i}
-done
-
-feh --bg-tile .wallpaper.jpeg
-sxhkd &
-exec /usr/bin/cwm

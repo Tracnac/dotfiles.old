@@ -13,22 +13,15 @@ fontname "Fantasque Sans Mono:pixelsize=14:bold"
 # Turn on sticky-group mode
 sticky yes
 
-# Any entry here is shown in the application menu
-# command firefox firefox
-# command st "/usr/local/bin/st"
-
-# Autogroup definitions
-
-# Ignore programs by that name by not drawing borders around them.
-# ignore xclock
-
 # Key bindings
 bind-key 4-r restart
-bind-key 4-space "/usr/bin/rofi -show drun"
-bind-key 4S-space "/usr/bin/rofi -show run"
-bind-key 4C-space "/usr/bin/rofi -show window"
+bind-key 4S-x quit
 
-bind-key 4-Return "/usr/local/bin/st"
+bind-key 4-space "rofi -show drun"
+bind-key 4S-space "rofi -show run"
+bind-key 4C-space "rofi -show window"
+
+bind-key 4-Return "st"
 bind-key 4-i ".bin/date.sh"
 
 bind-key 4-w window-close
