@@ -6,6 +6,7 @@ if filereadable(expand("~/.vim/autoload/plug.vim"))
     Plug 'https://github.com/edkolev/tmuxline.vim.git'
     Plug 'https://github.com/tpope/vim-surround.git'
     Plug 'https://github.com/luochen1990/rainbow.git'
+    Plug 'arcticicestudio/nord-vim'
   call plug#end()
 endif
 
@@ -13,7 +14,7 @@ endif
 " Airline 
   let g:airline#extensions#tabline#enabled = 1
   let g:airline_powerline_fonts=1
-  let g:airline_theme='bubblegum'
+  let g:airline_theme='nord'
 " Tmuxline
   let g:tmuxline_powerline_separators = 0
 " RainBow
@@ -33,7 +34,7 @@ if exists('+relativenumber')
 endif
 set nowrap
 set wildmenu
-set clipboard=unamedplus
+" set clipboard=unamedplus
 set et ts=2 sts=2 sw=2
 set encoding=UTF-8
 set ruler
@@ -48,7 +49,7 @@ set showmatch
 
 " Appearance
 set t_Co=256
-colorscheme elflord
+colorscheme nord
 set statusline+=%#warningmsg#
 set statusline+=%*
 
