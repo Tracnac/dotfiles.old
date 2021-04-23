@@ -17,7 +17,7 @@ endif
   let g:airline_powerline_fonts=1
   let g:airline_theme='nord'
 " Tmuxline
-  let g:tmuxline_powerline_separators = 0
+  let g:tmuxline_powerline_separators = 1
 " RainBow
   let g:rainbow_active = 1
 

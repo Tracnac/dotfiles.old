@@ -1,6 +1,6 @@
 configuration {
  modi: "window,drun,ssh,combi,run";
- font: "FantasqueSansMono Nerd Font Mono 14";
+ font: "Fantasque Sans Mono 13";
 }
 /************************************************
  * ROFI Color theme
