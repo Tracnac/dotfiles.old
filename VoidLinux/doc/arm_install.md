@@ -1,0 +1,23 @@
+## Service de base
+xbps-install dbus
+
+## Dev 
+
+xbps-install vim tmux git stow
+xbps-install wget curl
+xbps-install make pkg-config hyperfine
+xbps-install clang clang-analyzer clang-tools-extra
+xbps-install janet nim
+
+# X11 Minimum vital
+xbps-install xorg-server xf86-input-evdev
+xbps-install xf86-video-fbturbo
+xbps-install xinit xsel xclip xset xrandr xauth
+
+# Desktop
+xbps-install cwm st picom dunst rofi sxhkd hsetroot
+
+# Compilation de st
+xbps-install fontconfig-devel
+xbps-install libXft-devel
+
