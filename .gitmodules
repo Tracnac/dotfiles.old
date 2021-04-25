@@ -7,3 +7,6 @@
 [submodule "vimspace/dot-SpaceVim"]
 	path = vimspace/dot-SpaceVim
 	url = https://github.com/SpaceVim/SpaceVim.git
+[submodule "spacemacs/dot-emacs.d"]
+	path = spacemacs/dot-emacs.d
+	url = https://github.com/syl20bnr/spacemacs
