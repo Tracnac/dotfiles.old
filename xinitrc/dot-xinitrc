@@ -1,7 +1,14 @@
 #!/usr/bin/env sh
 
-[[ -x $(which setxkbmap) ]] && setxkbmap fr
-[[ -x $(which sxhkd) ]] && sxhkd &
+if [ -x $(which setxkbmap) ]
+then
+  setxkbmap fr
+fi
+
+if [ -x $(which sxhkd) ]
+then
+  sxhkd &
+fi
 
 # Add xrandr logic
 # xrandr --output DP1 --left-of eDP1
@@ -11,6 +18,15 @@
 # Need specific setup
 # picom --backend glx --vsync --detect-client-opacity --dbus -CGf
 
-[[ -x $(which hsetroot) ]] && [[ -f ~/.wallpaper.jpeg ]] && hsetroot -tile ~/.wallpaper.jpeg
-[[ -x $(which picom) ]] && picom --dbus -cf &
+if [ -x $(which hsetroot) -a -f ${HOME}/.wallpaper.jpeg ] 
+then
+  hsetroot -tile ${HOME}/.wallpaper.jpeg
+fi
+  
+if [ -x $(which picom) ]
+then
+  picom --dbus -cf &
+fi
+
 exec dbus-run-session cwm
+
