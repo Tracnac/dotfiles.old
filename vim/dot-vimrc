@@ -41,6 +41,7 @@ set encoding=UTF-8
 set ruler
 set rulerformat=%-14.(%l,%c%V%)\ %P
 set noshowmode
+set smartindent
 
 " Search option
 set hlsearch
@@ -53,9 +54,6 @@ set t_Co=256
 colorscheme nord
 set statusline+=%#warningmsg#
 set statusline+=%*
-
-" do nothing for comment
-autocmd BufNewFile,BufRead * setlocal formatoptions-=cro
 
 " Shortcut
 nnoremap  <silent> <tab>    :if &modifiable && !&readonly && &modified <CR> :write<CR> :endif<CR>:bnext<CR>

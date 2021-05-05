@@ -1,3 +1,16 @@
+# Voidlinux ARM
+
+## rc.local
+```
+ip link set dev eth0 up
+ip addr add 192.168.86.4/24 brd + dev eth0
+ip route add default via 192.168.86.1
+
+TZ=Europe/Paris
+LANG=en_US.UTF-8
+export TZ LANG
+```
+
 ## Service de base
 xbps-install dbus
 
