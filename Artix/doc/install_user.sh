@@ -1,5 +1,5 @@
 #!/bin/env bash
-PKGS=" stow sxhkd xcompmgr dunst rofi xclip xdotool"
+PKGS="stow sxhkd xcompmgr dunst rofi dmenu"
 
 # Default package
 pacman -S --noconfirm ${PKGS}
