@@ -28,3 +28,5 @@ super + Print
 Print
         sleep 0.2 && xdotool key XF86Ungrab && scrot -e 'mv $f ~/Pictures/Captures' 
 
+super + Return
+        st

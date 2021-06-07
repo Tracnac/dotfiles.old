@@ -1,8 +1,17 @@
 #!/bin/env bash
-PKGS="stow sxhkd xcompmgr dunst rofi dmenu"
+PKGS="sxhkd picom dunst rofi"
 
 # Default package
 pacman -S --noconfirm ${PKGS}
+
+
+# Install yay
+cd /opt
+sudo git clone https://aur.archlinux.org/yay-git.git
+sudo chown -R tracnac:users ./yay-git
+cd yay-git
+makepkg -si
+
 
 cd ~/
 git clone https://github.com/tracnac/dotfiles
@@ -13,8 +22,15 @@ stow bin
 cd dotfiles
 git submodule init
 git submodule update
+# git submodule update --init
 cd ~/
 # vim :PlugUpgrade + :PlugInstall
-# tmux ctrl-b shift i
+# tmux ctrl-b + shift i
+
+
+
 # git clone https://aur.archlinux.org/cwm.git
-# Build cwm + st
+# git clone https://aur.archlinux.org/st.git
+# Build cwm + st (makepkg -si)
+
+# https://github.com/adi1090x/polybar-themes

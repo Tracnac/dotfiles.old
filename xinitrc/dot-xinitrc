@@ -29,4 +29,3 @@ then
 fi
 
 exec dbus-run-session cwm
-
