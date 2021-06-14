@@ -14,13 +14,14 @@ export TZ LANG
 
 ## Services de base
 ```shell
-xbps-install chrony dbus mpd cups cups-filters connman 
+xbps-install chrony dbus mpd cups cups-filters connman cronie
 ln -s /etc/sv/ntpd /var/service
 ln -s /etc/sv/dbus /var/service
 ln -s /etc/sv/mpd /var/service
 ln -s /etc/sv/cupsd /var/service
 rm /var/service/dhcpcd
 ln -s /etc/sv/connmand /var/service
+ln -s /etc/sv/cronie /var/service
 ```
 
 ## Pour le Wifi
@@ -35,18 +36,25 @@ connect <wifi_id>
 
 ## Dev & Userland
 ```shell
-xbps-install vim tmux git stow bash-completion
+xbps-install vim tmux git stow bash-completion unzip 
 xbps-install wget curl
+xbps-install alsa-utils
 xbps-install make pkg-config hyperfine strace meson ctags
 xbps-install clang clang-analyzer clang-tools-extra llvm
 xbps-install janet nim nodejs go
 xbps-install gdb rr lldb
+xbps-install autoconf automake
+```
+
+## Emacs
+```shell
+xbps-install emacs-x11 isync mu mu4e
 ```
 
 ## X11 Minimum vital
 ```shell
 xbps-install xorg-server xf86-input-evdev
-xbps-install xinit xsel xclip xset xrandr xauth xdotool xev xprop xrdb setxkbmap
+xbps-install xinit xsel xclip xset xrandr xauth xdotool xev xprop xrdb setxkbmap xsetroot
 xbps-install mesa mesa-dri
 ```
 
@@ -66,19 +74,26 @@ xbps-install nvidia
 
 ## Desktop
 ```shell
-xbps-install bspwm picom dunst rofi sxhkd hsetroot scrot polybar mpc
+xbps-install bspwm picom dunst rofi sxhkd hsetroot scrot polybar mpc st
 ```
+
 ## Compilation de st
 ```shell
 xbps-install libXft-devel fontconfig-devel harfbuzz-devel
 ```
 
-## MPD
-```
-xbps-install alsa-utils
+## Audio et MPD
+```shell
+# Only with NVIDIA
+cat > /etc/asound.conf <<EOF
+defaults.pcm.card 1
+defaults.ctl.card 1
+EOF
+
 mkdir /var/lib/mpd/music
 touch /var/lib/mpd/{mpd.db,log}
 chown -R mpd:audio /var/lib/mpd
+chmod -R 0775 /var/lib/mpd
 cp /etc/mpd.conf /etc/mpd.save
 cat > /etc/mpd.conf <<EOF
 music_directory     "/var/lib/mpd/music"
@@ -112,11 +127,6 @@ EOF
 pkill mpd
 ```
 
-## Minimum vital WM
-```shell
-xbps-install cwm st
-```
-
 ## Creation user
 ```shell
 adduser -m -g users -G audio,video,wheel tracnac
@@ -134,10 +144,10 @@ git submodule init
 git submodule update
 #git submodule update --init
 cp dotfiles/dot-stowrc .stowrc
+cd ~/
 stow vim
 stow tmux
 stow bin
-cd ~/
 #vim :PlugUpgrade + :PlugInstall
 #tmux ctrl-b + I
 mkdir .config
@@ -154,3 +164,44 @@ ln -s ../dotfiles/dunst/dot-config/dunst
 ## Divers
 - Copy xorg files and keyboard usfr
 - Adjust font setting 
+
+## ISYNC
+Crontab :
+```
+# mm  hh  DD  MM  W /path/program [--option]...  ( W = weekday: 0-6 [Sun=0] )
+*/5 * * * * /usr/bin/mbsync mailfence 1>/dev/null 2>&1
+```
+
+```shell
+mkdir ~/.mail/mailfence
+cat > ~/.mbsyncrc <<EOF
+IMAPAccount mailfence
+Host imap.mailfence.com
+User *******
+Pass *******
+SSLType IMAPS
+CertificateFile /etc/ssl/certs/ca-certificates.crt
+
+IMAPStore mailfence-remote
+Account mailfence
+
+MaildirStore mailfence-local
+SubFolders Verbatim
+Path ~/.mail/mailfence/
+Inbox ~/.mail/mailfence/Inbox
+
+Channel mailfence
+Far :mailfence-remote:
+Near :mailfence-local:
+Patterns *
+Create Near
+Expunge Near
+Remove Near
+SyncState *
+Sync All
+EOF
+```
+```
+mu init --maildir=~/.mail/mailfence --my-address=tracnac@devmobs.fr
+mu index
+```
