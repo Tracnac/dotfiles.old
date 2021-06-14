@@ -1,14 +1,41 @@
-bspc monitor -d I II III IV V VI VII VIII IX X
+#! /bin/sh
 
-bspc config border_width         2
-bspc config window_gap          12
+background="#1F1F1F"
+foreground="#FFFFFF"
+foreground_alt="#8F8F8F"
+module_fg="#1F1F1F"
+primary="#ffb300"
+secondary="#E53935"
+alternate="#7cb342"
 
-bspc config split_ratio          0.52
-bspc config borderless_monocle   true
-bspc config gapless_monocle      true
+bspc monitor DP-4 -d ' ' ' ' ' ' ' ' ' '
+# bspc monitor HDMI-0 -d ' ' ' ' ' ' ' ' ' '
+
+bspc config border_width         1
+bspc config window_gap          10
+bspc config split_ratio          0.58
+
+bspc config focused_border_color "$primary" 
+bspc config normal_border_color "$background"
+bspc config active_border_color "$foreground_alt"
+bspc config presel_feedback_color "$secondary"
+
+bspc config borderless_monocle true
+bspc config gapless_monocle true
+bspc config single_monocle false
+
+# bspc config focus_follows_pointer true
+
+bspc config pointer_modifier mod4
+bspc config pointer_action1 move
+bspc config pointer_action2 resize_side
+bspc config pointer_action2 resize_corner
+
+bspc rule -r *:*
 
 # bspc rule -a Gimp desktop='^8' state=floating follow=on
 # bspc rule -a Chromium desktop='^2'
-# bspc rule -a mplayer2 state=floating
+bspc rule -a Lxappearance state=floating
+bspc rule -a st-float state=floating
 # bspc rule -a Kupfer.py focus=on
 # bspc rule -a Screenkey manage=off

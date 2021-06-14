@@ -1,14 +1,7 @@
 #!/usr/bin/env sh
 
-if [ -x $(which setxkbmap) ]
-then
-  setxkbmap fr
-fi
-
-if [ -x $(which sxhkd) ]
-then
-  sxhkd &
-fi
+sxhkd &
+xsetroot -cursor_name left_ptr
 
 # Add xrandr logic
 # xrandr --output DP1 --left-of eDP1
@@ -18,14 +11,7 @@ fi
 # Need specific setup
 # picom --backend glx --vsync --detect-client-opacity --dbus -CGf
 
-if [ -x $(which hsetroot) -a -f ${HOME}/.wallpaper.jpeg ] 
-then
-  hsetroot -tile ${HOME}/.wallpaper.jpeg
-fi
-  
-if [ -x $(which picom) ]
-then
-  picom --dbus -cf &
-fi
-
-exec dbus-run-session cwm
+hsetroot -tile ${HOME}/.wallpaper.jpeg
+picom --dbus -cf &
+~/.config/polybar/material/launch.sh &
+exec dbus-run-session bspwm -c ~/.config/bspwm/bspwmrc
