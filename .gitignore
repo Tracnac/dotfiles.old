@@ -1,2 +1,10 @@
 vim/dot-vim/plugged/**
 tmux/dot-tmux/plugins/**
+emacs/dot-emacs.d/**/#*#
+emacs/dot-emacs.d/**/*~
+emacs/dot-emacs.d/straight/**
+emacs/dot-emacs.d/transient/**
+emacs/dot-emacs.d/auto-save-list/**
+fonts/dot-fonts/.uuid
+vim/dot-vim/autoload/plug.vim.old
+vimspace/dot-vim/**
