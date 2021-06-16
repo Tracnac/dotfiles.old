@@ -74,7 +74,10 @@ xbps-install nvidia
 
 ## Desktop
 ```shell
-xbps-install bspwm picom dunst rofi sxhkd hsetroot scrot polybar mpc st
+cd /etc/skel
+mkdir -p Desktop Documents Downloads Music Pictures/Captures Public Templates Videos
+cd
+xbps-install bspwm picom dunst rofi sxhkd hsetroot scrot polybar mpc st xdg-utils xdg-user-dirs
 ```
 
 ## Compilation de st

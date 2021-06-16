@@ -16,6 +16,7 @@
 ;; Comportement par défaut
 (setq inhibit-compacting-font-caches t)
 (setq find-file-visit-truename t)
+(setq user-full-name "Tracnac")
 (setq user-mail-address "tracnac@devmobs.fr")
 ;; 
 (setq package-enable-at-startup nil)
@@ -42,6 +43,7 @@
 (straight-use-package 'smartparens)
 (straight-use-package 'rainbow-delimiters)
 (straight-use-package 'telephone-line)
+;;(straight-use-package 'exwm)
 
 ;; Add mu4e to the load-path:
 (add-to-list 'load-path "/usr/share/emacs/site-lisp/mu4e")
@@ -86,6 +88,10 @@
 
 (require 'rainbow-delimiters)
 (rainbow-delimiters-mode)
+
+;;(require 'exwm)
+;;(require 'exwm-config)
+;;(exwm-config-default)
 
 ;; Bienvenue et duration
 (let ((inhibit-message t))
