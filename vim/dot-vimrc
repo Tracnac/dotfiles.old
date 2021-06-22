@@ -48,7 +48,15 @@ set encoding=UTF-8
 set ruler
 set rulerformat=%-14.(%l,%c%V%)\ %P
 set noshowmode
+" TODO: Indent qui roule me casse les couilles
 set smartindent
+
+" Stop indenting comment
+autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
+
+" Avoid the freaking C-U
+inoremap <c-u> <c-g>u<c-u>
+inoremap <c-w> <c-g>u<c-w>
 
 " Search option
 set hlsearch
