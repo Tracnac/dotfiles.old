@@ -1,4 +1,11 @@
-if filereadable(expand("~/.vim/autoload/plug.vim"))
+let g:NIXOS=0
+if filereadable("/etc/os-release")
+  for line in readfile("/etc/os-release")
+    if line =~ 'ID=nixos' | let g:NIXOS=1 | endif
+   endfor
+endif
+
+if filereadable(expand("~/.vim/autoload/plug.vim")) && !g:NIXOS
   runtime! autoload/plug.vim
   call plug#begin()
     Plug 'https://github.com/vim-airline/vim-airline.git'
@@ -6,20 +13,20 @@ if filereadable(expand("~/.vim/autoload/plug.vim"))
     Plug 'https://github.com/edkolev/tmuxline.vim.git'
     Plug 'https://github.com/tpope/vim-surround.git'
     Plug 'https://github.com/luochen1990/rainbow.git'
-    Plug 'arcticicestudio/nord-vim'
-    Plug 'bakpakin/janet.vim'
+    Plug 'https://github.com/vim-scripts/YankRing.vim.git'
+    Plug 'https://github.com/arcticicestudio/nord-vim.git'
   call plug#end()
 endif
 
 " Plugin prefs
 " Airline 
-  let g:airline#extensions#tabline#enabled = 1
-  let g:airline_powerline_fonts=1
-  let g:airline_theme='nord'
+let g:airline#extensions#tabline#enabled = 1
+let g:airline_powerline_fonts=1
+let g:airline_theme='nord'
 " Tmuxline
-  let g:tmuxline_powerline_separators = 1
+let g:tmuxline_powerline_separators = 1
 " RainBow
-  let g:rainbow_active = 1
+let g:rainbow_active = 1
 
 " My sensible prefs
 set nocompatible
