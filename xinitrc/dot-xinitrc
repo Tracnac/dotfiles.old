@@ -19,10 +19,7 @@ xrandr --output DP-4 --left-of HDMI-0
 hsetroot -tile ${HOME}/.wallpaper.jpeg
 
 # Candy
-# TODO: Perform benchmark
-# Need specific setup
-# picom --backend glx --vsync --detect-client-opacity --dbus -CGf
-picom --dbus -cf &
+picom --backend glx --vsync --use-ewmh-active-win --dbus -cf &
 
 # FIXME: Rework polybar (Merge and simplify)
 ~/.config/polybar/material/launch.sh &
@@ -33,4 +30,3 @@ then
 else
   exec dbus-run-session dwm
 fi
-

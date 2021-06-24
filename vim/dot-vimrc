@@ -7,30 +7,33 @@ endif
 
 if filereadable(expand("~/.vim/autoload/plug.vim")) && !g:NIXOS
   runtime! autoload/plug.vim
-  call plug#begin()
-    Plug 'https://github.com/vim-airline/vim-airline.git'
-    Plug 'https://github.com/vim-airline/vim-airline-themes.git'
-    Plug 'https://github.com/edkolev/tmuxline.vim.git'
-    Plug 'https://github.com/tpope/vim-surround.git'
-    Plug 'https://github.com/luochen1990/rainbow.git'
-    Plug 'https://github.com/vim-scripts/YankRing.vim.git'
-    Plug 'https://github.com/arcticicestudio/nord-vim.git'
-  call plug#end()
+    call plug#begin()
+        Plug 'https://github.com/vim-airline/vim-airline.git'
+        Plug 'https://github.com/vim-airline/vim-airline-themes.git'
+        Plug 'https://github.com/ryanoasis/vim-devicons.git'
+        " Plug 'https://github.com/arcticicestudio/nord-vim.git'
+        Plug 'https://github.com/edkolev/tmuxline.vim.git'
+        " Plug 'https://github.com/tpope/vim-surround.git'
+        Plug 'https://github.com/luochen1990/rainbow.git'
+        Plug 'https://github.com/vim-scripts/YankRing.vim.git'
+        Plug 'https://github.com/preservim/nerdtree.git'
+        Plug 'https://tpope.io/vim/commentary.git'
+        Plug 'https://github.com/vim-autoformat/vim-autoformat.git'
+        Plug 'https://github.com/mbbill/undotree.git'
+    call plug#end()
 endif
-
-" Plugin prefs
-" Airline 
-let g:airline#extensions#tabline#enabled = 1
-let g:airline_powerline_fonts=1
-let g:airline_theme='nord'
-" Tmuxline
-let g:tmuxline_powerline_separators = 1
-" RainBow
-let g:rainbow_active = 1
 
 " My sensible prefs
 set nocompatible
+set autoread
+
+let mapleader = " "
+set timeoutlen=500
+
+set mouse=a
+set clipboard=unnamed
 set noerrorbells visualbell t_vb=
+
 set number
 if exists('+relativenumber')
   set relativenumber
@@ -40,21 +43,23 @@ if exists('+relativenumber')
   :  autocmd BufLeave,FocusLost,InsertEnter   * set norelativenumber
   :augroup END
 endif
+
 set nowrap
 set wildmenu
-" set clipboard=unamedplus
 set et ts=2 sts=2 sw=2
 set encoding=UTF-8
 set ruler
 set rulerformat=%-14.(%l,%c%V%)\ %P
-set noshowmode
+set showmode
+set showcmd
+
 " TODO: Indent qui roule me casse les couilles
 set smartindent
 
 " Stop indenting comment
 autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
 
-" Avoid the freaking C-U
+" Avoid the freaking
 inoremap <c-u> <c-g>u<c-u>
 inoremap <c-w> <c-g>u<c-w>
 
@@ -66,11 +71,49 @@ set showmatch
 
 " Appearance
 set t_Co=256
-colorscheme nord
+colorscheme pablo
 set statusline+=%#warningmsg#
 set statusline+=%*
+
+" Some Hack
+autocmd FocusGained,BufEnter * :silent! !
+autocmd FocusLost,WinLeave * :silent! noautocmd wa
+
+" Plugin prefs
+" Airline 
+let g:airline#extensions#tabline#enabled = 1
+let g:airline_powerline_fonts=1
+let g:airline_theme='bubblegum'
+" Tmuxline
+let g:tmuxline_powerline_separators = 1
+" RainBow
+let g:rainbow_active = 1
+" NerdTree
+let g:NERDTreeDirArrowExpandable = '▸ '
+let g:NERDTreeDirArrowCollapsible = '▾ '
+nnoremap <silent> <leader>f :NERDTreeToggle<CR>
+" UndoTree
+nnoremap <silent> <leader>u :UndotreeToggle<CR>
+" YankRing
+nnoremap <silent> <leader>y :YRShow<CR>
+let g:yankring_history_dir = '~/.vim'
+let g:yankring_history_file = '.yank'
 
 " Shortcut
 nnoremap  <silent> <tab>    :if &modifiable && !&readonly && &modified <CR> :write<CR> :endif<CR>:bnext<CR>
 nnoremap  <silent> <s-tab>  :if &modifiable && !&readonly && &modified <CR> :write<CR> :endif<CR>:bprevious<CR>
 nnoremap  <silent> <CR>     :nohlsearch<CR>
+
+" Heavily Evil Sorry :)
+:silent command! OpenInVSCode exe "silent !code-oss --goto '" . expand("%") . ":" . line(".") . ":" . col(".") . "'" | redraw!
+
+" Start NERDTree when Vim starts with a directory argument.
+autocmd StdinReadPre * let s:std_in=1
+autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists('s:std_in') |
+    \ execute 'NERDTree' argv()[0] | wincmd p | enew | execute 'cd '.argv()[0] | endif
+" Exit Vim if NERDTree is the only window left.
+autocmd BufEnter * if tabpagenr('$') == 1 && winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() |
+    \ quit | endif
+" If another buffer tries to replace NERDTree, put it in the other window, and bring back NERDTree.
+autocmd BufEnter * if bufname('#') =~ 'NERD_tree_\d\+' && bufname('%') !~ 'NERD_tree_\d\+' && winnr('$') > 1 |
+    \ let buf=bufnr() | buffer# | execute "normal! \<C-W>w" | execute 'buffer'.buf | endif
