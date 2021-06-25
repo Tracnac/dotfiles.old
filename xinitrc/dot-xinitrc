@@ -1,7 +1,5 @@
 #!/usr/bin/env sh
 
-# BSPWM
-sxhkd &
 xsetroot -cursor_name left_ptr
 
 # Return to safe value
@@ -18,15 +16,13 @@ xrandr --output DP-4 --left-of HDMI-0
 # Background
 hsetroot -tile ${HOME}/.wallpaper.jpeg
 
-# Candy
-picom --backend glx --vsync --use-ewmh-active-win --dbus -cf &
-
-# FIXME: Rework polybar (Merge and simplify)
-~/.config/polybar/material/launch.sh &
 
 if [ -f ~/.bspwm ];
 then
+  picom --backend glx --vsync --use-ewmh-active-win --dbus -cf &
+  sxhkd &
+  ~/.config/polybar/material/launch.sh &
   exec dbus-run-session bspwm -c ~/.config/bspwm/bspwmrc
 else
-  exec dbus-run-session dwm
+  exec dbus-run-session cwm
 fi
