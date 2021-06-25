@@ -12,7 +12,7 @@
 
   home.packages = with pkgs; [
     htop wget curl unzip git git-crypt
-    gnupg
+    gnupg pass pinentry_curses
     pkg-config hyperfine strace meson ctags
     clang_11 clang-analyzer llvm_11
     janet nim nodejs go
@@ -20,87 +20,41 @@
     autoconf automake
   ];
 
+  # Email configuration
+  programs.neomutt.enable = true;
+  programs.mbsync.enable = true;
+  services.mbsync.enable = true;
+  services.mbsync.frequency = "*:0/1";
+  programs.msmtp.enable = true;
+  programs.notmuch = {
+    enable = true;
+    hooks = {
+      preNew = "mbsync --all";
+    };
+  };
+
+  accounts.email.accounts.tracnac.notmuch.enable = true;
+  accounts.email.accounts.tracnac.mbsync.enable = true;
+  accounts.email.accounts.tracnac.mbsync.create = "maildir";
+  accounts.email.accounts.tracnac.msmtp.enable = true;
+  accounts.email.accounts.tracnac.neomutt.enable = true;
+  accounts.email.accounts.tracnac.primary = true;
+  accounts.email.accounts.tracnac.userName= "tracnac";
+  accounts.email.accounts.tracnac.realName= "Tracnac";
+  accounts.email.accounts.tracnac.address = "tracnac@devmobs.fr";
+  accounts.email.accounts.tracnac.imap.host = "imap.mailfence.com";
+  accounts.email.accounts.tracnac.smtp.host = "smtp.mailfence.com";
+  accounts.email.accounts.tracnac.passwordCommand = "${pkgs.pass}/bin/pass email";
+
   programs.git = {
     enable = true;
     userName  = "Tracnac";
     userEmail = "tracnac@devmobs.fr";
   };
 
-  programs.emacs = {
-    enable = true;
-    extraPackages = (epkgs: (with epkgs; [
-      nix-mode
-      magit
-      projectile
-      counsel
-      helpful
-      smartparens
-      rainbow-delimiters
-      undo-tree
-      doom-modeline
-      all-the-icons
-    ]));
-  };
-
-  programs.vim = {
-    enable = true;
-    extraConfig = ''
-      let g:airline#extensions#tabline#enabled = 1
-      let g:airline_powerline_fonts=1
-      let g:airline_theme='nord'
-      " RainBow
-      let g:rainbow_active = 1
-      " My prefs
-      set backspace=indent,eol,start
-      set nocompatible
-      set noerrorbells visualbell t_vb=
-      set number
-      if exists('+relativenumber')
-        set relativenumber
-        :augroup numbertoggle
-        :  autocmd!
-        :  autocmd BufEnter,FocusGained,InsertLeave * set relativenumber
-        :  autocmd BufLeave,FocusLost,InsertEnter   * set norelativenumber
-        :augroup END
-      endif
-      set nowrap
-      set wildmenu
-      set et ts=2 sts=2 sw=2
-      set encoding=UTF-8
-      set ruler
-      set rulerformat=%-14.(%l,%c%V%)\ %P
-      set noshowmode
-      set smartindent
-
-      " Search option
-      set hlsearch
-      set ignorecase
-      set smartcase
-      set showmatch
-
-      " Appearance
-      set t_Co=256
-      colorscheme nord
-      set statusline+=%#warningmsg#
-      set statusline+=%*
-
-      " Shortcut
-      nnoremap  <silent> <tab>    :if &modifiable && !&readonly && &modified <CR> :write<CR> :endif<CR>:bnext<CR>
-      nnoremap  <silent> <s-tab>  :if &modifiable && !&readonly && &modified <CR> :write<CR> :endif<CR>:bprevious<CR>
-      nnoremap  <silent> <CR>     :nohlsearch<CR>
-    '';
-    
-    settings = {
-    };
-
-    plugins = with pkgs.vimPlugins; [
-      sensible
-      vim-airline
-      vim-airline-themes
-      vim-surround
-      rainbow
-      YankRing-vim
-      nord-vim
-    ];
+  programs.gnupg.agent.pinentryFlavor = "curses";
+  programs.gnupg.agent = {
+     enable = true;
+     enableSSHSupport = true;
   };
 }

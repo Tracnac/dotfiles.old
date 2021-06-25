@@ -20,6 +20,7 @@
   boot.loader.grub.device = "/dev/sda"; # or "nodev" for efi only
 
   networking.hostName = "nixos"; # Define your hostname.
+  networking.enableIPv6 = false;
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
   # networking.wireless.interfaces = [ "wls1" ];
   # networking.wireless.networks = {
@@ -36,48 +37,78 @@
   # replicates the default behaviour.
   networking.useDHCP = false;
   networking.interfaces.ens3.useDHCP = true;
-
+  networking.interfaces.wls1.useDHCP = true;
+  
   # Configure network proxy if necessary
   # networking.proxy.default = "http://user:password@proxy:port/";
   # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
 
   # Select internationalisation properties.
   i18n.defaultLocale = "en_US.UTF-8";
-  # console = {
-  #   font = "Lat2-Terminus16";
-  #   keyMap = "us";
-  # };
+  console = {
+    font = "Lat2-Terminus16";
+    keyMap = "fr-pc";
+  };
+
+  fonts.fonts = with pkgs; [
+    dejavu_fonts
+    fantasque-sans-mono
+  ];
+
+  fonts.fontconfig.defaultFonts = {
+    monospace = [
+      "Fantasque Sans Mono"
+    ];
+    sansSerif = [
+      "DejaVu Sans"
+    ];
+    serif = [
+      "DejaVu Serif"
+    ];
+  };
 
   # Enable the X11 windowing system.
-  # services.xserver.enable = true;
+  services.xserver.enable = true;
+  services.xserver.windowManager.bspwm.enable = true;
+
+  # Enable the X11 windowing system.
+  services.xserver.enable = true;
 
   # Configure keymap in X11
-  # services.xserver.layout = "us";
-  # services.xserver.xkbOptions = "eurosign:e";
+  services.xserver.layout = "fr";
+  services.xserver.xkbOptions = "eurosign:e";
 
   # Enable CUPS to print documents.
   # services.printing.enable = true;
 
   # Enable sound.
-  # sound.enable = true;
+  sound.enable = true;
   # hardware.pulseaudio.enable = true;
 
   # Enable touchpad support (enabled default in most desktopManager).
-  # services.xserver.libinput.enable = true;
+  services.xserver.libinput.enable = true;
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
+  users.mutableUsers = false;
+  # Define a user account. Don't forget to set a password with ‘passwd’.
+  users.users.root = {
+    hashedPassword = "$6$08ILnGSYVk$dR0g5mdHXvOY4Wf/xLmOmv3dVxiEaDH9lD36U8ZcpNuqoqSSZ7QOoYeHMTmgVqOnMld8fkBTDiBetamtdfoeP1";
+  };
+
   users.users.tracnac = {
-     isNormalUser = true;
-     createHome = true;
-     description = "Tracnac user";
-     group = "users";
-     extraGroups = [ "wheel" ]; # Enable ‘sudo’ for the user.
+    isNormalUser = true;
+    createHome = true;
+    description = "Tracnac";
+    group = "users";
+    extraGroups = [ "wheel" "audio" "video" ]; # Enable ‘sudo’ for the user.
+    hashedPassword = "$6$5OUb9F7CCN$OTxg6IOJIodaEejO8/KAyl4f6eUK2RbN8oKaAPjGvTsf1X.sdF6VKjlZTT2DFsT8lMgRap/kTyXGPrMViRZ2i0";
   };
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
      vim
+     w3m
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
@@ -92,7 +123,6 @@
 
   # Enable the OpenSSH daemon.
   services.openssh.enable = true;
-
   # Open ports in the firewall.
   # networking.firewall.allowedTCPPorts = [ ... ];
   # networking.firewall.allowedUDPPorts = [ ... ];
