@@ -5,6 +5,7 @@
 (scroll-bar-mode -1)
 (tool-bar-mode -1)
 (tooltip-mode -1)
+
 (set-fringe-mode 10)
 (setq visible-bell nil)
 
@@ -43,24 +44,8 @@
 (straight-use-package 'smartparens)
 (straight-use-package 'rainbow-delimiters)
 (straight-use-package 'telephone-line)
+(straight-use-package 'notmuch)
 ;;(straight-use-package 'exwm)
-
-;; Add mu4e to the load-path:
-(add-to-list 'load-path "/usr/share/emacs/site-lisp/mu4e")
-(require 'mu4e)
-(setq mu4e-drafts-folder "/Drafts")
-(setq mu4e-sent-folder   "/Sent Items")
-(setq mu4e-trash-folder  "/Trash")
-(setq mu4e-get-mail-command "mbsync --config ~/.mbsyncrc mailfence")
-(setq mu4e-html2text-command "w3m -T text/html" ; how to hanfle html-formatted emails
-      mu4e-update-interval 300                  ; seconds between each mail retrieval
-      mu4e-headers-auto-update t                ; avoid to type `g' to update
-      mu4e-view-show-images t                   ; show images in the view buffer
-      mu4e-compose-signature-auto-include nil   ; I don't want a message signature
-      mu4e-use-fancy-chars t)                   ; allow fancy icons for mail threads
-(setq mu4e-compose-reply-ignore-address '("no-?reply" "tracnac@devmobs.fr"))
-(setq message-citation-line-function 'message-insert-formatted-citation-line)
-(setq message-citation-line-format "Le %Y-%m-%d à %T %Z, %f a écrit :\n")
 
 ;; Initialisation
 (require 'telephone-line)
@@ -83,6 +68,13 @@
 
 (require 'helpful)
 
+(require 'notmuch)
+(setq send-mail-function 'sendmail-send-it
+      sendmail-program "/usr/bin/msmtp"
+      mail-specify-envelope-from t
+      message-sendmail-envelope-from 'header
+      mail-envelope-from 'header)
+
 (require 'smartparens)
 (smartparens-mode)
 
@@ -103,8 +95,6 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(smtpmail-smtp-server "smtp.mailfence.com")
- '(smtpmail-smtp-service 465))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
