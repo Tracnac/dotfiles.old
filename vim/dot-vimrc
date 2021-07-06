@@ -31,7 +31,8 @@ let mapleader = " "
 set timeoutlen=500
 
 set mouse=a
-set clipboard=unnamed
+set clipboard=unnamedplus
+set -g @extrakto_clip_tool "xsel --input --clipboard"
 set noerrorbells visualbell t_vb=
 
 set number

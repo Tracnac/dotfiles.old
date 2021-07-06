@@ -49,12 +49,20 @@
 
 ;; Initialisation
 (require 'telephone-line)
-(setq telephone-line-primary-left-separator 'telephone-line-cubed-left
-      telephone-line-secondary-left-separator 'telephone-line-cubed-hollow-left
-      telephone-line-primary-right-separator 'telephone-line-cubed-right
-      telephone-line-secondary-right-separator 'telephone-line-cubed-hollow-right)
-(setq telephone-line-height 24
-      telephone-line-evil-use-short-tag t)
+(setq telephone-line-lhs
+      '((evil   . (telephone-line-evil-tag-segment))
+	(accent . (telephone-line-vc-segment
+		   telephone-line-erc-modified-channels-segment
+		   telephone-line-process-segment))
+	(nil    . (telephone-line-minor-mode-segment
+		   telephone-line-buffer-segment))))
+(setq telephone-line-rhs
+      '((nil    . (telephone-line-misc-info-segment))
+	(accent . (telephone-line-major-mode-segment))
+	(evil   . (telephone-line-airline-position-segment))))
+
+(setq telephone-line-evil-use-short-tag t)
+
 (telephone-line-mode 1)
 
 (require 'projectile)
@@ -101,3 +109,4 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  )
+)
