@@ -46,6 +46,8 @@
 (straight-use-package 'telephone-line)
 (straight-use-package 'notmuch)
 ;;(straight-use-package 'exwm)
+(straight-use-package
+  '(nano-emacs :type git :host github :repo "rougier/nano-emacs"))
 
 ;; Initialisation
 (require 'telephone-line)
@@ -93,7 +95,8 @@
 ;;(require 'exwm-config)
 ;;(exwm-config-default)
 
-;; Bienvenue et duration
+(require 'nano-faces)
+
 (let ((inhibit-message t))
      (message "Welcome to GNU Emacs T R /\\ C N /\\ C. Edition")
      (message (format "Initialization time: %s" (emacs-init-time))))

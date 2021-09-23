@@ -1,1 +1,1 @@
-("~/dotfiles/")
+("~/.dotfiles/" "~/Project/nano-emacs/")
