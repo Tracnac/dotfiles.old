@@ -1,28 +1,33 @@
 #!/usr/bin/env sh
 
-xsetroot -cursor_name left_ptr
 
 # Return to safe value
 xbacklight -set 50%
 amixer -c 1 -q set 'Master' 25%
+xsetroot -cursor_name left_ptr
 
 # Add xrandr logic
 xrandr --output DP-4 --left-of HDMI-0
 
 # Add xprop mouse logic
-# xinput --list --id-only "$(xinput --list --name-only | grep Corsair)"
-# xinput --set-prop 15 309 -0.8
+xinput --list --id-only "$(xinput --list --name-only | grep Corsair)"
+xinput --set-prop 15 309 -0.8
 
 # Background
 hsetroot -tile ${HOME}/.wallpaper.jpeg
 
-
 if [ -f ~/.bspwm ];
 then
+  setxkbmap -device 10 usfr
+  setxkbmap -device $(xinput list --id-only 'keyboard:ITE Tech. Inc. ITE Device(8910) Keyboard') fr
   picom --backend glx --vsync --use-ewmh-active-win --dbus -cf &
   sxhkd &
   ~/.config/polybar/material/launch.sh &
   exec dbus-run-session bspwm -c ~/.config/bspwm/bspwmrc
 else
+  setxkbmap -device 10 usfr
+  setxkbmap -device $(xinput list --id-only 'keyboard:ITE Tech. Inc. ITE Device(8910) Keyboard') fr
+  ~/.config/polybar/cwm/launch.sh &
+  picom --backend glx --vsync --use-ewmh-active-win --dbus -cf &
   exec dbus-run-session cwm
 fi
