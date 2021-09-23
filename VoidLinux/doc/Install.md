@@ -21,7 +21,7 @@ xbps-install gnupg2 pinentry pass pass-git-helper git-crypt
 
 ## Services de base
 ```shell
-xbps-install chrony dbus mpd cups cups-filters connman cronie
+xbps-install chrony dbus mpd cups cups-filters connman cronie acpid tlp
 ln -s /etc/sv/ntpd /var/service
 ln -s /etc/sv/dbus /var/service
 ln -s /etc/sv/mpd /var/service
@@ -29,6 +29,8 @@ ln -s /etc/sv/cupsd /var/service
 rm /var/service/dhcpcd
 ln -s /etc/sv/connmand /var/service
 ln -s /etc/sv/cronie /var/service
+ln -s /etc/sv/acpid /var/service
+ln -s /etc/sv/tlp /var/service
 ```
 ## Pour le Wifi
 ```shell
@@ -63,11 +65,10 @@ EOF
 xbps-install neovim tmux git stow bash-completion unzip
 xbps-install wget curl
 xbps-install alsa-utils
-xbps-install make pkg-config hyperfine strace meson ctags
-xbps-install clang clang-analyzer clang-tools-extra llvm
-xbps-install janet nim nodejs go
-xbps-install gdb rr lldb
-xbps-install autoconf automake
+xbps-install make autoconf automake pkg-config hyperfine strace meson ctags
+xbps-install clang clang-analyzer clang-tools-extra llvm lldb
+xbps-install janet nodejs go
+xbps-install gdb rr 
 xbps-install qemu
 ```
 
@@ -79,8 +80,8 @@ xbps-install emacs-x11 mu mu4e
 ## X11 Minimum vital
 ```shell
 xbps-install xorg-server xf86-input-evdev
-xbps-install xinit xsel xclip xset xrandr xauth xdotool xev xprop xrdb setxkbmap xsetroot
-xbps-install mesa mesa-dri
+xbps-install xinit xsel xclip xset xrandr xauth xdotool xev xprop xrdb setxkbmap xsetroot xbacklight xinput
+# xbps-install mesa mesa-dri
 ```
 
 ## X11 Video
@@ -102,7 +103,7 @@ xbps-install nvidia
 cd /etc/skel
 mkdir -p Desktop Documents Downloads Music Pictures/Captures Public Templates Videos
 cd
-xbps-install bspwm picom dunst rofi sxhkd hsetroot scrot polybar mpc st xdg-utils xdg-user-dirs
+xbps-install bspwm picom dunst rofi sxhkd hsetroot scrot polybar mpc st xdg-utils xdg-user-dirs i3lock
 ```
 
 ## Compilation de st
@@ -301,5 +302,38 @@ cat > .gitconfig <<EOF
         signingkey = 8E7873806AA124421519A62DA9BCFEFD2464C1B2
 [commit]
         gpgsign = true
+EOF
+```
+
+# U2F
+pamu2fcfg > ~/u2f_keys
+sudo cp u2f_keys /etc/u2f_keys
+Add to /etc/pam.d/system-auth:
+```
+auth      sufficient pam_u2f.so     authfile=/etc/u2f_keys cue
+```
+
+# PGP (check with: echo "test" | gpg --clearsign)
+```shell
+mkdir ~/.gnupg
+cat > ~/.gnupg/gpg.conf <<EOF
+utf8-strings
+debug-level basic
+log-file socket:///home/tracnac/.gnupg/log-socket
+keyserver hkp://keys.gnupg.net
+cert-digest-algo SHA256
+no-emit-version
+no-comments
+personal-cipher-preferences AES AES256 AES192 CAST5
+personal-digest-preferences SHA256 SHA512 SHA384 SHA224
+ignore-time-conflict
+allow-freeform-uid
+EOF
+cat > ~/.gnupg/gpg-agent.conf <<EOF
+debug-level basic
+log-file socket:///home/tracnac/.gnupg/log-socket
+default-cache-ttl 28800
+max-cache-ttl 28800
+pinentry-program /usr/bin/pinentry-curses
 EOF
 ```
