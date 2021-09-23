@@ -13,16 +13,12 @@ fontname "Fantasque Sans Mono:pixelsize=14:bold"
 # Turn on sticky-group mode
 sticky yes
 
+# Ignore bar around dock
+ignore polybar
+
 # Key bindings
 bind-key 4-r restart
 bind-key 4S-x quit
-
-bind-key 4-space "rofi -show drun"
-bind-key 4S-space "rofi -show run"
-bind-key 4C-space "rofi -show window"
-
-bind-key 4-Return "st"
-bind-key 4-i ".bin/date.sh"
 
 bind-key 4-w window-close
 bind-key 4-s window-hide
@@ -69,3 +65,29 @@ bind-key 4S-9 window-movetogroup-9
 bind-mouse 4-1 window-move
 bind-mouse 4-2 window-lower
 bind-mouse 4-3 window-resize
+
+# Specific bindings
+
+bind-key 4-space "rofi -show drun"
+bind-key 4S-space "rofi -show run"
+bind-key 4C-space "rofi -show window"
+
+bind-key 4-Return "st"
+bind-key 4-i ".bin/date.sh"
+bind-key 4-l "i3lock -u -t -i .wallpaper.png"
+
+bind-key XF86AudioMute "amixer -c 1 -q set 'Master' toggle"
+bind-key XF86AudioLowerVolume "amixer -c 1 -q set 'Master' 5%-"
+bind-key XF86AudioRaiseVolume "amixer -c 1 -q set 'Master' 5%+"
+
+bind-key XF86MonBrightnessUp "xbacklight -inc 5"
+bind-key XF86MonBrightnessDown "xbacklight -dec 5"
+
+bind-key XF86AudioPrev "mpc prev"
+bind-key XF86AudioNext "mpc next"
+bind-key XF86AudioStop "mpc stop"
+bind-key XF86AudioPlay "mpc toggle"
+
+bind-key Print ".bin/print.sh full"
+bind-key 4-Print ".bin/print.sh window"
+bind-key 4S-Print ".bin/print.sh crop"
