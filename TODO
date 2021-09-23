@@ -1,0 +1,3 @@
+- Reorganiser la Documentation par section et action root en premier.
+- Activer git-crypt pour les clefs
+- Merge de tous les fichiers de configurations qui ne sont pas dans le dotfiles
