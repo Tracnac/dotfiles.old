@@ -28,6 +28,6 @@ else
   setxkbmap -device 10 usfr
   setxkbmap -device $(xinput list --id-only 'keyboard:ITE Tech. Inc. ITE Device(8910) Keyboard') fr
   ~/.config/polybar/cwm/launch.sh &
-  picom --backend glx --vsync --use-ewmh-active-win --dbus -cf &
+#  picom --backend glx --vsync --use-ewmh-active-win --dbus -cf &
   exec dbus-run-session cwm
 fi
