@@ -32,6 +32,7 @@ ln -s /etc/sv/cronie /var/service
 ln -s /etc/sv/acpid /var/service
 ln -s /etc/sv/tlp /var/service
 ```
+
 ## Pour le Wifi
 ```shell
 connmanctl  
@@ -41,6 +42,7 @@ services
 agent on
 connect <wifi_id>
 ```
+
 ## Mail
 ```shell
 # TODO: Aliases
@@ -62,7 +64,7 @@ EOF
 
 ## Dev & Userland
 ```shell
-xbps-install neovim tmux git stow bash-completion unzip
+xbps-install vim tmux git stow bash-completion unzip
 xbps-install wget curl
 xbps-install alsa-utils
 xbps-install make autoconf automake pkg-config hyperfine strace meson ctags
@@ -103,7 +105,7 @@ xbps-install nvidia
 cd /etc/skel
 mkdir -p Desktop Documents Downloads Music Pictures/Captures Public Templates Videos
 cd
-xbps-install bspwm picom dunst rofi sxhkd hsetroot scrot polybar mpc st xdg-utils xdg-user-dirs i3lock
+xbps-install bspwm cwm picom dunst rofi sxhkd hsetroot scrot polybar mpc st xdg-utils xdg-user-dirs i3lock
 ```
 
 ## Compilation de st
@@ -168,18 +170,25 @@ passwd tracnac
 # TODO: Make a shell script
 cd ~/
 git clone https://github.com/tracnac/dotfiles .dotfiles
-cd dotfiles
+cd .dotfiles
 git submodule init
 git submodule update
-#git submodule update --init
+# git submodule update --init
 cd ~/
+ln -s .dotfiles/bin/dot-bin .bin
+ln -s .dotfiles/vim/dot-vim .vim
+ln -s .dotfiles/vim/dot-vimrc  .vimrc
+ln -s .dotfiles/tmux/dot-tmux .tmux
+ln -s .dotfiles/tmux/dot-tmux.conf .tmux.conf
 #vim :PlugUpgrade + :PlugInstall
 #tmux ctrl-b + I
+ln -s .dotfiles/cwmrc/dot-cwmrc .cwmrc
+ln -s .dotfiles/wallpaper/dot-wallpaper.jpeg .wallpaper.jpeg
 mkdir .config
 cd ~/.config
 ln -s ../.dotfiles/rofi/dot-config/rofi
-ln -s ../.dotfiles/sxhkd/dot-config/sxhkd
 ln -s ../.dotfiles/dunst/dot-config/dunst
+ln -s ../.dotfiles/polybar/dot-config/polybar
 ```
 
 # Imprimante
@@ -306,8 +315,10 @@ EOF
 ```
 
 # U2F
+```shell
 pamu2fcfg > ~/u2f_keys
 sudo cp u2f_keys /etc/u2f_keys
+```
 Add to /etc/pam.d/system-auth:
 ```
 auth      sufficient pam_u2f.so     authfile=/etc/u2f_keys cue
