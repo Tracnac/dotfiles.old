@@ -1,19 +1,14 @@
-# use UTF-8 everywhere
-export LANG=en_US.UTF-8
+#!/usr/bin/env sh
 
-# Java bug..
-export _JAVA_AWT_WM_NONREPARENTING=1
+# Return to safe value
+xbacklight -set 50%
+xsetroot -cursor_name left_ptr
 
-# specify location of kshrc
-export ENV=$HOME/.kshrc
+# Reset MPC/MPD
+mpc load radioparadise
+mpc play
+mpc pause
 
-# load Xresources file
-xrdb -merge $HOME/.Xresources
-
-# set your background color
-xsetroot -solid dimgray
-
-# exec dwm
-# ~/bin/slstatus &
-# exec dwm
+# Background
+hsetroot -tile ${HOME}/.wallpaper.jpeg
 exec cwm
