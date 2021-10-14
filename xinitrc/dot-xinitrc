@@ -1,6 +1,5 @@
 #!/usr/bin/env sh
 
-
 # Return to safe value
 xbacklight -set 50%
 amixer -c 1 -q set 'Master' 25%
