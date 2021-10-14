@@ -6,6 +6,11 @@ xbacklight -set 50%
 amixer -c 1 -q set 'Master' 25%
 xsetroot -cursor_name left_ptr
 
+# Reset MPC/MPD
+mpc load radioparadise
+mpc play
+mpc pause
+
 # Add xrandr logic
 xrandr --output DP-4 --left-of HDMI-0
 
