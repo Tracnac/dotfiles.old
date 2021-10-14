@@ -1,13 +1,8 @@
 #!/usr/bin/env sh
 
 # Return to safe value
-xbacklight -set 50%
+xbacklight -set 75%
 xsetroot -cursor_name left_ptr
-
-# Reset MPC/MPD
-mpc load radioparadise
-mpc play
-mpc pause
 
 # Background
 hsetroot -tile ${HOME}/.wallpaper.jpeg
