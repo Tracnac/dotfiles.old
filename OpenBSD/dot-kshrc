@@ -5,6 +5,9 @@ case "$(command -v vim)" in
   *)     VIM=vi  ;;
 esac
 
+export TZ=Europe/Paris
+export LANG=en_US.UTF-8
+
 export EDITOR=$VIM
 export FCEDIT=$EDITOR
 export PAGER=less
@@ -34,4 +37,7 @@ alias svi="doas vi"
 
 export PS1="{\A} \u@\l [\W] \$ "
 
-[ ! -z "${WINDOWID}" ] && $(tmux ls > /dev/null 2>&1 || tmux new -s DBAdmin)
+if [ ! -z "${WINDOWID}" ]
+then
+  tmux ls > /dev/null 2>&1 || tmux new -s DBAdmin
+fi
