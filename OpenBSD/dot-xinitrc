@@ -1,5 +1,9 @@
 #!/usr/bin/env sh
 
+# load profile
+# (Look like a bug in OpenBSD does not respect loginShell via xenodm)
+. "${HOME}/.profile"
+
 # load Xresources file
 xrdb -merge "${HOME}/.Xresources"
 
