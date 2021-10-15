@@ -183,7 +183,7 @@ ln -s .dotfiles/tmux/dot-tmux.conf .tmux.conf
 #vim :PlugUpgrade + :PlugInstall
 #tmux ctrl-b + I
 ln -s .dotfiles/cwmrc/dot-cwmrc .cwmrc
-ln -s .dotfiles/wallpaper/dot-wallpaper.jpeg .wallpaper.jpeg
+ln -s .dotfiles/wallpaper/dot-wallpaper.png .wallpaper.png
 mkdir .config
 cd ~/.config
 ln -s ../.dotfiles/rofi/dot-config/rofi

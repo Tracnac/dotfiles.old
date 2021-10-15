@@ -18,7 +18,7 @@ xinput --list --id-only "$(xinput --list --name-only | grep Corsair)"
 xinput --set-prop 15 309 -0.8
 
 # Background
-hsetroot -tile ${HOME}/.wallpaper.jpeg
+hsetroot -tile ${HOME}/.wallpaper.png
 
 if [ -f ~/.bspwm ];
 then

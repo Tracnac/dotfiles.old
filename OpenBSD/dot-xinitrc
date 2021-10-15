@@ -5,5 +5,5 @@ xbacklight -set 75%
 xsetroot -cursor_name left_ptr
 
 # Background
-hsetroot -tile ${HOME}/.wallpaper.jpeg
+hsetroot -tile ${HOME}/.wallpaper.png
 exec cwm
