@@ -14,4 +14,4 @@ xinput set-prop "/dev/wsmouse" "WS Pointer Wheel Emulation Axes" 6 7 4 5
 
 # Background
 hsetroot -tile "${HOME}/.wallpaper.png"
-exec cwm
+exec dbus-run-session cwm
