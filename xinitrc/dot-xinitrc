@@ -1,5 +1,8 @@
 #!/usr/bin/env sh
 
+# load Xresources file
+xrdb -merge "${HOME}/.Xresources"
+
 # Return to safe value
 xbacklight -set 50%
 amixer -c 1 -q set 'Master' 25%
@@ -7,7 +10,6 @@ xsetroot -cursor_name left_ptr
 
 # Reset MPC/MPD
 mpc load radioparadise
-mpc play
 mpc pause
 
 # Add xrandr logic
