@@ -1,11 +1,11 @@
 *.loginShell:true
 
-! ===== fonts
 Xft.autohint  : 0
 Xft.lcdfilter : lcddefault
 Xft.hintstyle : hintslight
 Xft.hinting   : 1
 Xft.antialias : 1
 Xft.rgba      : rgb
+Xft.dpi       : 96
 ! fixed is the one true font - use iso10646 for unicode characters
-*font         : -misc-fixed-medium-r-semicondensed-*-13-*-*-*-*-*-iso10646-1
+! *font         : -misc-fixed-medium-r-semicondensed-*-13-*-*-*-*-*-iso10646-1
