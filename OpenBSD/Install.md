@@ -242,6 +242,8 @@ ln -s .dotfiles/vim/dot-vim .vim
 ln -s .dotfiles/vim/dot-vimrc  .vimrc
 ln -s .dotfiles/tmux/dot-tmux .tmux
 ln -s .dotfiles/tmux/dot-tmux.conf .tmux.conf
+ln -s .dotfiles/OpenBSD/dot-kshrc .kshrc
+ln -s .dotfiles/OpenBSD/dot-profile .profile
 # vim :PlugUpgrade + :PlugInstall
 # tmux ctrl-b + I
 ```
@@ -265,3 +267,8 @@ ln -s ../.dotfiles/dunst/dot-config/dunst
 cd ~
 doas pkg_add clang-tools-extra valgrind go janet
 ```
+
+
+# TODO
+# wsconsctl display.brightness=100%
+# wsconsctl keyboard.backlight=0%
