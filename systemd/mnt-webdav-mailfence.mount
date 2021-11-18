@@ -1,0 +1,16 @@
+# https://wiki.archlinux.org/title/Davfs2
+[Unit]
+Description=Mount WebDAV Service Mailfence
+After=network-online.target
+Wants=network-online.target
+
+[Mount]
+Where=/mnt/webdav/mailfence
+What=https://mailfence.com/docs/Tracnac
+Type=davfs
+Options=rw,user,uid=tracnac,noauto
+TimeoutSec=15
+
+[Install]
+WantedBy=multi-user.target
+
