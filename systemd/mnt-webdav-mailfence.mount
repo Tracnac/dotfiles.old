@@ -1,4 +1,5 @@
 # https://wiki.archlinux.org/title/Davfs2
+# /etc/davfs2/secrets
 [Unit]
 Description=Mount WebDAV Service Mailfence
 After=network-online.target
@@ -13,4 +14,3 @@ TimeoutSec=15
 
 [Install]
 WantedBy=multi-user.target
-

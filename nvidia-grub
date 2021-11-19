@@ -1,0 +1,3 @@
+Pour ajouter des options au kernel
+grubby --info=ALL
+grubby --update-kernel /boot/vmlinuz-5.14.17-301.fc35.x86_64 --args="nvidia.NVreg_RegistryDwords=EnableBrightnessControl=1"
