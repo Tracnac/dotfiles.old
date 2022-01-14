@@ -10,17 +10,17 @@ if filereadable(expand("~/.vim/autoload/plug.vim")) && !g:NIXOS
     call plug#begin()
         Plug 'https://github.com/vim-airline/vim-airline.git'
         Plug 'https://github.com/vim-airline/vim-airline-themes.git'
-        Plug 'https://github.com/ryanoasis/vim-devicons.git'
+        " Plug 'https://github.com/ryanoasis/vim-devicons.git'
         " Plug 'https://github.com/arcticicestudio/nord-vim.git'
         Plug 'https://github.com/edkolev/tmuxline.vim.git'
         " Plug 'https://github.com/tpope/vim-surround.git'
         Plug 'https://github.com/luochen1990/rainbow.git'
-        Plug 'https://github.com/vim-scripts/YankRing.vim.git'
-        Plug 'https://github.com/preservim/nerdtree.git'
-        Plug 'https://tpope.io/vim/commentary.git'
-        Plug 'https://github.com/vim-autoformat/vim-autoformat.git'
-        Plug 'https://github.com/mbbill/undotree.git'
-        Plug 'neovim/nvim-lspconfig'
+        " Plug 'https://github.com/vim-scripts/YankRing.vim.git'
+        " Plug 'https://github.com/preservim/nerdtree.git'
+        " Plug 'https://tpope.io/vim/commentary.git'
+        " Plug 'https://github.com/vim-autoformat/vim-autoformat.git'
+        " Plug 'https://github.com/mbbill/undotree.git'
+        " Plug 'neovim/nvim-lspconfig'
     call plug#end()
 endif
 
@@ -32,7 +32,7 @@ let mapleader = " "
 set timeoutlen=500
 
 set mouse=a
-set clipboard=unnamedplus
+" set clipboard=unnamedplus
 " set -g @extrakto_clip_tool "xsel --input --clipboard"
 set noerrorbells visualbell t_vb=
 

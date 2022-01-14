@@ -102,7 +102,9 @@ TODO default
 ### login.conf
 Attention à la syntaxe... OpenBSD est POSIX
 ```shell
-cp /etc/login.conf /root/login.conf
+cd ~/
+mkdir backup
+cp /etc/login.conf /root/backup/login.conf
 sed -i -e '/staff:\\/,/#/{//!d;};' /etc/login.conf
 sed -i -e '/staff:\\/a\
         :datasize-cur=2048M:\\\
@@ -142,12 +144,14 @@ EOF
 
 ### fstab
 ```shell
-cp /etc/fstab /root/fstab
+cp /etc/fstab /root/backup/fstab
 sed -i -e 's/rw,/rw,softdep,noatime,/' /etc/fstab
 sed -i -e 's/rw /rw,softdep,noatime /' /etc/fstab
 ```
 
 ### MPD music
+# mpc load radioparadise
+# mpc play
 ```shell
 pkg_add mpd mpc
 sed -i 's/please-configure-your-music_directory/var\/spool\/mpd\/music/g' /etc/mpd.conf
@@ -258,17 +262,30 @@ ln -s .dotfiles/fonts/dot-fonts .fonts
 rm .fonts/FantasqueSansMonoRegular.ttf
 fc-cache --force
 ln -s .dotfiles/OpenBSD/dot-cwmrc .cwmrc
-ln -s .dotfiles/OpenBSD/dot-xinitrc .xession
+ln -s .dotfiles/OpenBSD/dot-xinitrc .xsession
 ln -s .dotfiles/wallpaper/dot-wallpaper.png .wallpaper.png
 mkdir .config
 cd ~/.config
 ln -s ../.dotfiles/rofi/dot-config/rofi
 ln -s ../.dotfiles/dunst/dot-config/dunst
 cd ~
-doas pkg_add clang-tools-extra valgrind go janet
+doas pkg_add clang-tools-extra go janet fish fzf bat
+fish
+curl -sL https://git.io/fisher | source && fisher install jorgebucaran/fisher
+fisher install PatrickF1/fzf.fish
 ```
 
+# Emacs
+```shell
+doas pkg_add emacs ripgrep fzf shellcheck
+git clone --depth 1 https://github.com/hlissner/doom-emacs ~/.emacs.d
+~/.emacs.d/bin/doom install
+```
 
 # TODO
 # wsconsctl display.brightness=100%
 # wsconsctl keyboard.backlight=0%
+# go env
+# Compile st
+# Build https://github.com/sharkdp/fd.git for fish
+# go tools
