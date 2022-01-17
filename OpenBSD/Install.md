@@ -4,7 +4,7 @@
 
 `qemu-system-x86_64 -hda /opt/qemu/img/openbsd70.img -smp 2 -m 2048 -device e1000,netdev=net0 -netdev user,id=net0,hostfwd=tcp::2222-:22 -device intel-hda`
 
-`qemu-system-x86_64 -hda /opt/qemu/img/openbsd70.img -smp 2 -m 2048 -device e1000,netdev=net0 -netdev user,id=net0,hostfwd=tcp::2222-:22 -device intel-hda -boot d -cdrom ~/Downloads/install70.iso`
+`qemu-system-x86_64 -hda /opt/qemu/img/openbsd70.img -smp 2 -m 2048 -device e1000,netdev=net0 -netdev user,id=net0,hostfwd=tcp::2222-:22 -device intel-hda -boot d -cdrom ~/Downloads/miniroot70.img`
 
 
 ## Chiffrage du disque lors de l'installation
@@ -30,7 +30,7 @@ export LANG=en_US.UTF-8
 export ENV=\${HOME}/.kshrc
 EOF
 cat > ${HOME}/.kshrc <<EOF
-set -o vi
+set -o emacs
 export PS1="{\A} \u@\l [\W] \\$ "
 EOF
 cat >> /etc/wsconsctl.conf << EOF
@@ -207,7 +207,7 @@ EOF
 
 ```shell
 cd /etc/skel
-mkdir -p Desktop Documents Downloads Music Pictures/Captures Public Templates Videos
+mkdir -p Desktop Documents Downloads Music Pictures/Captures Projects Public Templates Videos
 cat > /etc/skel/.kshrc <<EOF
 set -o vi
 export HISTFILE="\${HOME}/.sh_history"
@@ -246,18 +246,23 @@ ln -s .dotfiles/vim/dot-vim .vim
 ln -s .dotfiles/vim/dot-vimrc  .vimrc
 ln -s .dotfiles/tmux/dot-tmux .tmux
 ln -s .dotfiles/tmux/dot-tmux.conf .tmux.conf
+rm .kshrc .profile
 ln -s .dotfiles/OpenBSD/dot-kshrc .kshrc
 ln -s .dotfiles/OpenBSD/dot-profile .profile
 # vim :PlugUpgrade + :PlugInstall
 # tmux ctrl-b + I
+doas pkg_add clang-tools-extra go janet fish fzf bat rust
+fish
+curl -sL https://git.io/fisher | source && fisher install jorgebucaran/fisher
+fisher install PatrickF1/fzf.fish
+chsh -s /usr/local/bin/fish tracnac
+# cargo install fd-find Failed needed by fzf.fish
 ```
 
 ### Configure X
-# TODO: Remplacer polybar (bloat)
-# TODO: Compiler st sous BSD
-# TODO: script shell pour les liens
 ```shell
-doas pkg_add rofi dunst i3lock hsetroot st scrot xclip xsel
+# TODO: Remplacer polybar (bloat)
+doas pkg_add rofi dunst i3lock hsetroot scrot xclip xsel
 ln -s .dotfiles/fonts/dot-fonts .fonts
 rm .fonts/FantasqueSansMonoRegular.ttf
 fc-cache --force
@@ -269,23 +274,34 @@ cd ~/.config
 ln -s ../.dotfiles/rofi/dot-config/rofi
 ln -s ../.dotfiles/dunst/dot-config/dunst
 cd ~
-doas pkg_add clang-tools-extra go janet fish fzf bat
-fish
-curl -sL https://git.io/fisher | source && fisher install jorgebucaran/fisher
-fisher install PatrickF1/fzf.fish
 ```
 
-# Emacs
+#### Emacs
 ```shell
 doas pkg_add emacs ripgrep fzf shellcheck
 git clone --depth 1 https://github.com/hlissner/doom-emacs ~/.emacs.d
 ~/.emacs.d/bin/doom install
 ```
 
-# TODO
-# wsconsctl display.brightness=100%
-# wsconsctl keyboard.backlight=0%
-# go env
-# Compile st
-# Build https://github.com/sharkdp/fd.git for fish
-# go tools
+#### ST
+```shell
+cd ~/.dotfiles/pkgsrc/st
+tar xvzf st-0.8.2.tgz
+cp ../config.* .
+doas make install
+```
+
+#### Go
+```shell
+mkdir .go
+go env -w GOPATH="/home/tracnac/.go"
+go env -w GOMODCACHE="/home/tracnac/.go/pkg/mod"
+go install github.com/Code-Hex/go-install-tools@latest
+~/.go/bin/go-install-tools
+fish_add_path ~/.go/bin
+```
+
+### TODO
+### wsconsctl display.brightness=100%
+### wsconsctl keyboard.backlight=0%
+### Email client
