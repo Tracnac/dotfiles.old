@@ -22,7 +22,8 @@ fdisk -iy sd0
 ```shell
 syspatch
 fw_update
-pkg_add vim colorls spleen mosh
+# vim-*-gtk3
+pkg_add vim colorls spleen mosh git
 cat >> /etc/profile <<EOF
 export TZ=Europe/Paris
 export LANG=en_US.UTF-8
@@ -175,7 +176,7 @@ cat >> /etc/X11/xenodm/Xsetup_0 << EOF
 xsetroot -solid black
 xset b off
 EOF
-cp /etc/X11/xenodm/Xresources /root/Xresources
+cp /etc/X11/xenodm/Xresources /root/backup/Xresources
 cat > /etc/X11/xenodm/Xresources <<EOF
 ! $OpenBSD: Xresources.in,v 1.3 2020/06/28 15:38:34 matthieu Exp $
 !
@@ -226,7 +227,6 @@ cd ~/
 echo 'set from=tracnac@devmobs.fr' >> ${HOME}/.mailrc
 echo 'set replyto=tracnac@devmobs.fr' >> ${HOME}/.mailrc
 
-doas pkg_add git
 cat > ~/.gitconfig <<EOF
 [user]
         email = tracnac@devmobs.fr
@@ -255,6 +255,7 @@ doas pkg_add clang-tools-extra go janet fish fzf bat rust
 fish
 curl -sL https://git.io/fisher | source && fisher install jorgebucaran/fisher
 fisher install PatrickF1/fzf.fish
+echo '/usr/local/bin/fish' | doas tee -a /etc/shells
 chsh -s /usr/local/bin/fish tracnac
 # cargo install fd-find Failed needed by fzf.fish
 ```
@@ -279,20 +280,24 @@ cd ~
 #### Emacs
 ```shell
 doas pkg_add emacs ripgrep fzf shellcheck
-git clone --depth 1 https://github.com/hlissner/doom-emacs ~/.emacs.d
-~/.emacs.d/bin/doom install
+# git clone --depth 1 https://github.com/hlissner/doom-emacs
+# git clone https://github.com/rougier/nano-emacs.git
+# ~/.emacs.d/bin/doom install
+# Update init.el
 ```
 
 #### ST
 ```shell
 cd ~/.dotfiles/pkgsrc/st
 tar xvzf st-0.8.2.tgz
+cd st-0.8.2
 cp ../config.* .
 doas make install
 ```
 
 #### Go
 ```shell
+cd ~/
 mkdir .go
 go env -w GOPATH="/home/tracnac/.go"
 go env -w GOMODCACHE="/home/tracnac/.go/pkg/mod"
