@@ -309,7 +309,7 @@ fish_add_path ~/.go/bin
 
 #### ISYNC
 ```shell
-doas pkg_add isync neomutt notmuch
+doas pkg_add isync neomutt notmuch w3m pandoc zathura feh
 ```
 Crontab :
 ```
