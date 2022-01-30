@@ -76,10 +76,11 @@ set postponed = +Drafts
 set record = "+Sent Items"
 set trash = +Trash
 
-# folder-hook /home/tracnac/.mail/mailfence/ "source /home/tracnac/.config/neomutt/tracnac"
+folder-hook /home/tracnac/.mail/mailfence/ "source /home/tracnac/.config/neomutt/tracnac"
 
 # Source primary account
 source /home/tracnac/.config/neomutt/tracnac
+source /home/tracnac/.config/neomutt/mailboxes
 
 # Extra configuration
 

@@ -359,9 +359,9 @@ notmuch new
 #### NEOMUTT
 ```shell
 mkdir -p .cache/neomutt/headers .cache/neomutt/messages
-find .mail/mailfence -not \( -path *cur* -o -path *new* -o -path *tmp* -o -path *.notmuch* -prune \) -type d | sed 's|.mail/mailfence/\(.*\)$|mailboxes "\+\1\"|g' > ~/.config/neomutt/mailboxes
 cd ~/.config
 ln -s ../.dotfiles/neomutt/dot-config/neomutt
+find .mail/mailfence -not \( -path *cur* -o -path *new* -o -path *tmp* -o -path *.notmuch* -prune \) -type d | sed 's|.mail/mailfence/\(.*\)$|mailboxes "\+\1\"|g' > ~/.config/neomutt/mailboxes
 
 ### TODO
 ### wsconsctl display.brightness=100%
