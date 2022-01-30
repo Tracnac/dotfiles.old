@@ -1,0 +1,6 @@
+# vim: filetype=muttrc
+
+macro index,pager gi "<change-folder>=Inbox<enter>" "go to inbox"
+macro index,pager gs "<change-folder>=Sent Items<enter>" "go to sent"
+macro index,pager gd "<change-folder>=Drafts<enter>" "go to drafts"
+macro index,pager gt "<change-folder>=Trash<enter>" "go to trash"

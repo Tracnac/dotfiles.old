@@ -284,6 +284,7 @@ doas pkg_add emacs ripgrep fzf shellcheck
 # git clone https://github.com/rougier/nano-emacs.git
 # ~/.emacs.d/bin/doom install
 # Update init.el
+
 ```
 
 #### ST
@@ -306,7 +307,62 @@ go install github.com/Code-Hex/go-install-tools@latest
 fish_add_path ~/.go/bin
 ```
 
+#### ISYNC
+```shell
+doas pkg_add isync neomutt notmuch
+```
+Crontab :
+```
+# mm  hh  DD  MM  W /path/program [--option]...  ( W = weekday: 0-6 [Sun=0] )
+*/5 * * * * /usr/bin/mbsync mailfence 1>/dev/null 2>&1
+```
+
+```shell
+mkdir -p ~/.mail/mailfence
+cat > ~/.mbsyncrc <<EOF
+IMAPAccount mailfence
+Host imap.mailfence.com
+User username
+Pass password
+SSLType IMAPS
+CertificateFile /etc/ssl/cert.pem
+
+IMAPStore mailfence-remote
+Account mailfence
+
+MaildirStore mailfence-local
+SubFolders Verbatim
+Path ~/.mail/mailfence/
+Inbox ~/.mail/mailfence/Inbox
+
+Channel mailfence
+Far :mailfence-remote:
+Near :mailfence-local:
+Patterns *
+Create Near
+Expunge Near
+Remove Near
+SyncState *
+Sync All
+EOF
+chmod 0400 ~/.mbsyncrc
+chmod 0700 ~/.mail
+chmod 0700 ~/.mail/mailfence
+```
+```shell
+# TODO: Notmuch for better integration with neomutt
+notmuch setup
+mbsync mailfence
+notmuch new
+```
+
+#### NEOMUTT
+```shell
+mkdir -p .cache/neomutt/headers .cache/neomutt/messages
+find .mail/mailfence -not \( -path *cur* -o -path *new* -o -path *tmp* -o -path *.notmuch* -prune \) -type d | sed 's|.mail/mailfence/\(.*\)$|mailboxes "\+\1\"|g' > ~/.config/neomutt/mailboxes
+cd ~/.config
+ln -s ../.dotfiles/neomutt/dot-config/neomutt
+
 ### TODO
 ### wsconsctl display.brightness=100%
 ### wsconsctl keyboard.backlight=0%
-### Email client

@@ -1,0 +1,30 @@
+# vim: filetype=muttrc
+
+set ssl_force_tls = yes
+set certificate_file=/etc/ssl/cert.pem
+
+# GPG section
+set crypt_use_gpgme = yes
+set crypt_autosign = no
+set crypt_opportunistic_encrypt = no
+set pgp_use_gpg_agent = yes
+
+# MTA section
+# set sendmail='msmtp --read-envelope-from --read-recipients'
+
+# MRA section
+set mbox_type = Maildir
+set folder='/home/tracnac/.mail/mailfence'
+set from='tracnac@devmobs.fr'
+set postponed='+Drafts'
+set realname='Tracnac'
+set record='+Sent Items'
+set spoolfile='+Inbox'
+set trash='+Trash'
+
+
+# Extra configuration
+
+# notmuch section
+set nm_default_uri = "notmuch:///home/tracnac/.mail/mailfence"
+# virtual-mailboxes "My INBOX" "notmuch://?query=tag:inbox"
