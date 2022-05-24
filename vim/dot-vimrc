@@ -82,6 +82,8 @@ let g:airline_theme='bubblegum'
 let g:tmuxline_powerline_separators = 1
 " RainBow
 let g:rainbow_active = 1
+" Yankring
+let g:yankring_history_dir = '/home/tracnac/.cache/'
 
 " Shortcut
 nnoremap  <silent> <leader><tab>  :if &modifiable && !&readonly && &modified <CR> :write<CR> :endif<CR>:bnext<CR>

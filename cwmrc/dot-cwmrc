@@ -4,7 +4,7 @@ unbind-mouse all
  
 # Border and Color
 borderwidth 1
-gap 0 40 0 0
+# gap 0 40 0 0
 color activeborder "#FFD866"
 color inactiveborder "#444444"
 
