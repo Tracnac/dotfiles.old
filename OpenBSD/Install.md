@@ -80,7 +80,7 @@ rcctl restart smtpd
 ### Les ports
 ```shell
 cd /tmp
-ftp https://cdn.openbsd.org/pub/OpenBSD/$(uname -r)/{ports.tar.gz,SHA256.sig}
+ftp https://ftp.openbsd.org/pub/OpenBSD/$(uname -r)/{ports.tar.gz,SHA256.sig}
 signify -Cp /etc/signify/openbsd-$(uname -r | cut -c 1,3)-base.pub -x SHA256.sig ports.tar.gz
 ```
 Attention bien vérifier le tar... "./ports" bug.
@@ -147,7 +147,6 @@ EOF
 ```shell
 cp /etc/fstab /root/backup/fstab
 sed -i -e 's/rw,/rw,softdep,noatime,/' /etc/fstab
-sed -i -e 's/rw /rw,softdep,noatime /' /etc/fstab
 ```
 
 ### MPD music
@@ -210,7 +209,7 @@ EOF
 cd /etc/skel
 mkdir -p Desktop Documents Downloads Music Pictures/Captures Projects Public Templates Videos
 cat > /etc/skel/.kshrc <<EOF
-set -o vi
+set -o emacs
 export HISTFILE="\${HOME}/.sh_history"
 export HISTSIZE=16384
 

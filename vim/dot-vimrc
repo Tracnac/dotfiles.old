@@ -1,35 +1,41 @@
+
+" Reset to default
+set all&
+set nocompatible
+
+" Plugins
 if filereadable(expand("~/.vim/autoload/plug.vim"))
   runtime! autoload/plug.vim
     call plug#begin()
         Plug 'https://github.com/vim-airline/vim-airline.git'
         Plug 'https://github.com/vim-airline/vim-airline-themes.git'
         " Plug 'https://github.com/ryanoasis/vim-devicons.git'
-        Plug 'https://github.com/arcticicestudio/nord-vim.git'
+        " Plug 'https://github.com/arcticicestudio/nord-vim.git'
         Plug 'https://github.com/edkolev/tmuxline.vim.git'
-        Plug 'https://github.com/tpope/vim-surround.git'
+        " Plug 'https://github.com/tpope/vim-surround.git'
         Plug 'https://github.com/luochen1990/rainbow.git'
         Plug 'https://github.com/vim-scripts/YankRing.vim.git'
         " Plug 'https://github.com/preservim/nerdtree.git'
         Plug 'https://tpope.io/vim/commentary.git'
         " Plug 'https://github.com/vim-autoformat/vim-autoformat.git'
         " Plug 'https://github.com/mbbill/undotree.git'
-        Plug 'prabirshrestha/async.vim'
-        Plug 'prabirshrestha/vim-lsp'
-        Plug 'prabirshrestha/asyncomplete.vim'
-        Plug 'prabirshrestha/asyncomplete-lsp.vim'
-        Plug 'mattn/vim-lsp-settings'
+        " Plug 'prabirshrestha/async.vim'
+        " Plug 'prabirshrestha/vim-lsp'
+        " Plug 'prabirshrestha/asyncomplete.vim'
+        " Plug 'prabirshrestha/asyncomplete-lsp.vim'
+        " Plug 'mattn/vim-lsp-settings'
+        Plug 'https://github.com/dense-analysis/ale'
+
     call plug#end()
 endif
 
 " My sensible prefs
-set nocompatible
 set autoread
 
-let mapleader = " "
+let mapleader=' '
 set timeoutlen=500
 
 set mouse=a
-set clipboard=unnamedplus
 set noerrorbells visualbell t_vb=
 
 set number
@@ -42,6 +48,8 @@ if exists('+relativenumber')
   :augroup END
 endif
 
+set backspace=indent,eol,start
+set viminfo=
 set nowrap
 set wildmenu
 set et ts=2 sts=2 sw=2
@@ -51,12 +59,6 @@ set rulerformat=%-14.(%l,%c%V%)\ %P
 set showmode
 set showcmd
 
-" TODO: Indent qui roule me casse les couilles
-" set smartindent
-
-" Stop indenting comment
-" autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
-
 " Search option
 set hlsearch
 set ignorecase
@@ -64,80 +66,49 @@ set smartcase
 set showmatch
 
 " Appearance
+colorscheme desert
 set t_Co=256
-colorscheme nord
 set statusline+=%#warningmsg#
 set statusline+=%*
 
-" Some Hack
-autocmd FocusGained,BufEnter * :silent! !
-autocmd FocusLost,WinLeave * :silent! noautocmd wa
+if has("gui_running")
+   :set guifont='VictorMono NF':h16:cANSI:qDRAFT
+endif
 
-" Plugin prefs
+" Backup file
+set noswapfile
+set nobackup
+set nowritebackup
+set noundofile
+
+" Indent
+set noautoindent
+set nosmartindent
+set nocindent
+set inde=
+
+" Plugins prefs
 " Airline 
-let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#tabline#enabled=1
 let g:airline_powerline_fonts=1
 let g:airline_theme='bubblegum'
 " Tmuxline
-let g:tmuxline_powerline_separators = 1
+let g:tmuxline_powerline_separators=1
 " RainBow
-let g:rainbow_active = 1
+let g:rainbow_active=1
 " Yankring
-let g:yankring_history_dir = '/home/tracnac/.cache/'
+let g:yankring_history_dir = '~/.vim'
+" ALE
+nmap gd :ALEGoToDefinitionInTab<CR>
+nmap gr :ALEFindReferences<CR>
+nmap K :ALEHover<CR>
+let g:ale_completion_enabled=1
+
+" Autocmd
+autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
 
 " Shortcut
-nnoremap  <silent> <leader><tab>  :if &modifiable && !&readonly && &modified <CR> :write<CR> :endif<CR>:bnext<CR>
-noremap  <silent> <leader><s-tab> :if &modifiable && !&readonly && &modified <CR> :write<CR> :endif<CR>:bprevious<CR>
-noremap  <silent> <leader><CR>    :nohlsearch<CR>
-
-" Asyncomlete
-inoremap <expr> <Tab>   pumvisible() ? "\<C-n>" : "\<Tab>"
-inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
-inoremap <expr> <cr>    pumvisible() ? asyncomplete#close_popup() : "\<cr>"
-imap <c-@> <Plug>(asyncomplete_force_refresh)
-
-" LSP 
-if executable('clangd')
-    augroup lsp_clangd
-        autocmd!
-        autocmd User lsp_setup call lsp#register_server({
-                    \ 'name': 'clangd',
-                    \ 'cmd': {server_info->['clangd']},
-                    \ 'whitelist': ['c', 'cpp', 'objc', 'objcpp'],
-                    \ })
-        autocmd FileType c setlocal omnifunc=lsp#complete
-        autocmd FileType cpp setlocal omnifunc=lsp#complete
-        autocmd FileType objc setlocal omnifunc=lsp#complete
-        autocmd FileType objcpp setlocal omnifunc=lsp#complete
-    augroup end
-endif
-
-augroup lsp_install
-    au!
-    " call s:on_lsp_buffer_enabled only for languages that has the server registered.
-    autocmd User lsp_buffer_enabled call s:on_lsp_buffer_enabled()
-augroup END
-
-function! s:on_lsp_buffer_enabled() abort
-    setlocal omnifunc=lsp#complete
-    setlocal signcolumn=yes
-    if exists('+tagfunc') | setlocal tagfunc=lsp#tagfunc | endif
-    nmap <buffer> gd <plug>(lsp-definition)
-    nmap <buffer> gs <plug>(lsp-document-symbol-search)
-    nmap <buffer> gS <plug>(lsp-workspace-symbol-search)
-    nmap <buffer> gr <plug>(lsp-references)
-    nmap <buffer> gi <plug>(lsp-implementation)
-    nmap <buffer> gt <plug>(lsp-type-definition)
-    nmap <buffer> <leader>rn <plug>(lsp-rename)
-    nmap <buffer> [g <plug>(lsp-previous-diagnostic)
-    nmap <buffer> ]g <plug>(lsp-next-diagnostic)
-    nmap <buffer> K <plug>(lsp-hover)
-    nnoremap <buffer> <expr><c-f> lsp#scroll(+4)
-    nnoremap <buffer> <expr><c-d> lsp#scroll(-4)
-
-    let g:lsp_format_sync_timeout = 1000
-    autocmd! BufWritePre *.rs,*.go call execute('LspDocumentFormatSync')
-    
-    " refer to doc to add more commands
-endfunction
+nnoremap  <silent> <tab>  :bnext!<CR>
+nnoremap  <silent> <s-tab> :bprevious!<CR>
+nnoremap  <silent> <CR>    :nohlsearch<CR>
 
