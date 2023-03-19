@@ -30,7 +30,7 @@ alias ll='ls -l'
 alias la='ls -lA'
 alias ..='cd ..'
 alias ...='cd ...'
-alias weather='curl http://wttr.in/Paris'
+alias weather='curl https://wttr.in/Paris'
 alias svim="doas vim"
 alias svi="doas vi"
 

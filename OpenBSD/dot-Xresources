@@ -28,6 +28,8 @@ Xft.dpi                 : 96
 
 xterm*scrollTtyOutput   : false
 xterm*scrollBar         : false
+xterm*saveLines         : 32768
+XTerm*metaSendsEscape   : true
 
 *.foreground            :   nord4
 *.background            :   nord0
