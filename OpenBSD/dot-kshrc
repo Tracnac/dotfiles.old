@@ -6,7 +6,7 @@ case "$(command -v vim)" in
 esac
 
 export TZ=Europe/Paris
-export LANG=en_US.UTF-8
+export LANG=C.UTF-8
 
 export EDITOR=$VIM
 export FCEDIT=$EDITOR
@@ -31,7 +31,6 @@ alias la='ls -lA'
 alias ..='cd ..'
 alias ...='cd ...'
 alias weather='curl http://wttr.in/Paris'
-command -v neomutt > /dev/null && alias mutt='neomutt'
 alias svim="doas vim"
 alias svi="doas vi"
 

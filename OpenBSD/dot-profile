@@ -3,10 +3,6 @@
 # sh/ksh initialization
 
 echo "Enter .profile"
-PATH=/sbin:/usr/sbin:/bin:/usr/bin:/usr/X11R6/bin:/usr/local/sbin:/usr/local/bin
-export PATH HOME TERM
-
-export TZ=Europe/Paris
-export LANG=en_US.UTF-8
+PATH=/sbin:/usr/sbin:/bin:/usr/bin:/usr/X11R6/bin:/usr/local/sbin:/usr/local/bin:${HOME}/.bin
 
 export ENV=\${HOME}/.kshrc
