@@ -1,14 +1,13 @@
 #!/usr/bin/env sh
 
-# load profile
-# (Look like a bug in OpenBSD does not respect loginShell via xenodm)
-. "${HOME}/.profile"
+source "${HOME}/.profile"
 
 # load Xresources file
 xrdb -merge "${HOME}/.Xresources"
 
 # Return to safe value
-xbacklight -set 75%
+# xbacklight -set 75%
+wsconsctl display.brightness=33%
 xsetroot -cursor_name left_ptr
 
 # Thinkpad
@@ -18,8 +17,7 @@ xsetroot -cursor_name left_ptr
 
 # Background
 hsetroot -tile "${HOME}/.wallpaper.png"
-exec dbus-run-session cwm
-
+dbus-launch cwm
 
 # TODO
 # wsconsctl display.brightness=100%
