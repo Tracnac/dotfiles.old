@@ -1,4 +1,4 @@
-;; -*- emacs-lisp -*- <21/12/07 10:02:38 /home/tracnac/.emacs.d/tramp>
+;; -*- emacs-lisp -*- <23/03/24 22:43:11 /home/tracnac/.emacs.d/tramp>
 ;; Tramp connection history.  Don't change this file.
 ;; Run `M-x tramp-cleanup-all-connections' instead.
 
@@ -27,4 +27,30 @@
   ("uid-integer" 0)
   ("tmpdir" "/ssh:root@192.168.122.90:/tmp")
   ("touch-t" t)
-  ("touch" "\\touch")))
+  ("touch" "\\touch"))
+ ((tramp-file-name "ssh" "tracnac" nil "192.168.86.46" nil nil nil)
+  ("uname" "OpenBSD 7.2")
+  ("locale" "LC_ALL=en_US.UTF-8")
+  ("test" "test")
+  ("remote-path"
+   ("/usr/bin" "/bin" "/usr/sbin" "/sbin" "/usr/X11R6/bin" "/usr/local/bin" "/usr/local/sbin"))
+  ("pipe-buf" 512)
+  ("remote-shell" "/bin/sh")
+  ("~" "/home/tracnac")
+  ("file-exists" "test -e")
+  ("case-insensitive" nil)
+  ("readlink" nil)
+  ("perl-file-spec" t)
+  ("perl-cwd-realpath" t)
+  ("perl" "\\perl")
+  ("stat" nil)
+  ("id" "/usr/bin/id")
+  ("gid-integer" 10)
+  ("gid-string" "users")
+  ("ls" "/bin/ls")
+  ("ls--quoting-style=literal --show-control-chars" nil)
+  ("ls--dired" nil)
+  ("df-blocksize" 1024)
+  ("df" "\\df -k")
+  ("git" "\\git")
+  ("env-u-option" nil)))

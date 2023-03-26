@@ -68,9 +68,9 @@ xbps-install vim tmux git stow bash-completion unzip
 xbps-install wget curl
 xbps-install alsa-utils
 xbps-install make autoconf automake pkg-config hyperfine strace meson ctags
-xbps-install clang clang-analyzer clang-tools-extra llvm lldb
-xbps-install janet nodejs go
-xbps-install gdb rr 
+# xbps-install clang clang-analyzer clang-tools-extra llvm lldb
+# xbps-install janet nodejs go
+# xbps-install gdb rr 
 xbps-install qemu
 ```
 
@@ -83,13 +83,13 @@ xbps-install emacs-x11 mu mu4e
 ```shell
 xbps-install xorg-server xf86-input-evdev
 xbps-install xinit xsel xclip xset xrandr xauth xdotool xev xprop xrdb setxkbmap xsetroot xbacklight xinput
-# xbps-install mesa mesa-dri
 ```
 
 ## X11 Video
 ### Specifique à Intel
 ``` Shell
 xbps-install intel-video-accel
+xbps-install mesa mesa-dri
 xbps-install vulkan-loader
 xbps-install mesa-vulkan-intel
 ```
@@ -105,7 +105,7 @@ xbps-install nvidia
 cd /etc/skel
 mkdir -p Desktop Documents Downloads Music Pictures/Captures Public Templates Videos
 cd
-xbps-install bspwm cwm picom dunst rofi sxhkd hsetroot scrot polybar mpc st xdg-utils xdg-user-dirs i3lock
+xbps-install bspwm cwm picom dunst rofi sxhkd hsetroot scrot polybar mpc st xdg-utils xdg-user-dirs i3lock xterm
 ```
 
 ## Compilation de st
@@ -189,6 +189,7 @@ cd ~/.config
 ln -s ../.dotfiles/rofi/dot-config/rofi
 ln -s ../.dotfiles/dunst/dot-config/dunst
 ln -s ../.dotfiles/polybar/dot-config/polybar
+cd ~/
 ```
 
 # Imprimante
@@ -303,7 +304,7 @@ EOF
 
 ## Install git
 ```shell
-cd ~
+cd ~/
 cat > .gitconfig <<EOF
 [user]
         email = tracnac@devmobs.fr

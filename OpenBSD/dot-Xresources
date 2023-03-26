@@ -29,13 +29,15 @@ Xft.dpi                 : 96
 xterm*scrollTtyOutput   : false
 xterm*scrollBar         : false
 xterm*saveLines         : 32768
-XTerm*metaSendsEscape   : true
+xterm*metaSendsEscape   : true
+xterm*faceName          : Victor Mono
+xterm*faceSize          : 10
 
-*.foreground            :   nord4
-*.background            :   nord0
-*.cursorColor           :  nord4
-*fading                 : 35
-*fadeColor              : nord3
+*.foreground            : nord4
+*.background            : nord0
+*.cursorColor           : nord4
+*.fading                : 35
+*.fadeColor             : nord3
 
 *.color0                : nord1
 *.color1                : nord11

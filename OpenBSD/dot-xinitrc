@@ -7,7 +7,7 @@ xrdb -merge "${HOME}/.Xresources"
 
 # Return to safe value
 # xbacklight -set 75%
-wsconsctl display.brightness=33%
+wsconsctl display.brightness=75%
 xsetroot -cursor_name left_ptr
 
 # Thinkpad

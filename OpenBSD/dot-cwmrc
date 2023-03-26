@@ -66,7 +66,7 @@ bind-key 4-space "rofi -show drun"
 bind-key 4S-space "rofi -show run"
 bind-key 4C-space "rofi -show window"
 
-bind-key 4-Return "st"
+bind-key 4-Return "/usr/X11R6/bin/xterm"
 bind-key 4-i ".bin/date.sh"
 bind-key 4-l "i3lock -u -t -i .wallpaper.png"
 

@@ -1,11 +1,8 @@
 # Installation OpenBSD
 
 `qemu-img create -f qcow2 /opt/qemu/img/openbsd70.img 8G`
-
 `qemu-system-x86_64 -hda /opt/qemu/img/openbsd70.img -smp 2 -m 2048 -device e1000,netdev=net0 -netdev user,id=net0,hostfwd=tcp::2222-:22 -device intel-hda`
-
 `qemu-system-x86_64 -hda /opt/qemu/img/openbsd70.img -smp 2 -m 2048 -device e1000,netdev=net0 -netdev user,id=net0,hostfwd=tcp::2222-:22 -device intel-hda -boot d -cdrom ~/Downloads/miniroot70.img`
-
 
 ## Chiffrage du disque lors de l'installation
 
@@ -16,27 +13,13 @@ Afficher les disques, j'assume que le disque est sd0
 sysctl hw.disknames
 fdisk -iy sd0
 ```
-
 ## Sous root
+
 ### Patching et config de base
 ```shell
 syspatch
 fw_update
-# vim-*-gtk3
-pkg_add vim colorls spleen mosh git
-cat >> /etc/profile <<EOF
-export TZ=Europe/Paris
-export LANG=en_US.UTF-8
-
-export ENV=\${HOME}/.kshrc
-EOF
-cat > ${HOME}/.kshrc <<EOF
-set -o emacs
-export PS1="{\A} \u@\l [\W] \\$ "
-EOF
-cat >> /etc/wsconsctl.conf << EOF
-keyboard.bell.volume=0
-EOF
+pkg_add dbus colorls spleen git vim--gtk3 emacs--gtk3 mpd mpc clang-tools-extra go fzf ripgrep shellcheck rofi dunst polybar hsetroot scrot xclip xsel isync notmuch w3m pandoc zathura feh 
 ```
 
 ### Services
@@ -44,8 +27,76 @@ EOF
 rcctl disable slaacd
 rcctl enable apmd
 rcctl set apmd flags -A
-pkg_add dbus
 rcctl enable messagebus
+```
+### login.conf
+Attention à la syntaxe... OpenBSD est POSIX
+```shell
+cp /etc/login.conf /root/backup/login.conf
+sed -i -e '/staff:\\/,/#/{//!d;};' /etc/login.conf
+sed -i -e '/staff:\\/a\
+        :datasize-cur=2048M:\\\
+        :datasize-max=infinity:\\\
+        :maxproc-cur=512:\\\
+        :maxproc-max=1024:\\\
+        :openfiles-cur=4096:\\\
+        :openfiles-max=8192:\\\
+        :stacksize-cur=32M:\\\
+        :ignorenologin:\\\
+        :requirehome@:\\\
+        :tc=default:
+
+' /etc/login.conf
+```
+### sysctl.conf
+```shell
+cat > /etc/sysctl.conf << EOF
+# shared memory limits
+kern.shminfo.shmall=3145728
+kern.shminfo.shmmax=2147483647
+kern.shminfo.shmmni=1024
+
+# semaphores
+kern.shminfo.shmseg=1024
+kern.seminfo.semmns=4096
+kern.seminfo.semmni=1024
+
+kern.maxproc=32768
+kern.maxfiles=65535
+kern.bufcachepercent=90
+kern.maxvnodes=262144
+kern.somaxconn=2048
+EOF
+```
+### NTPD
+```shell
+cp /etc/ntpd.conf ~/backup
+sed -i '/google/d' /etc/ntpd.conf
+rcctl restart ntpd
+```
+
+### fstab
+```shell
+cp /etc/fstab /root/backup/fstab
+sed -i -e 's/rw,/rw,softdep,noatime,/' /etc/fstab
+```
+### Shell environment
+```shell
+cd ~/
+mkdir backup
+cat > /etc/profile <<EOF
+export TZ=Europe/Paris
+export LANG=C
+EOF
+cat >> ${HOME}/.profile <<EOF
+export ENV=\${HOME}/.kshrc
+EOF
+cat > ${HOME}/.kshrc <<EOF
+export PS1='{\A} \u@\l [\W] \\$ '
+EOF
+cat >> /etc/wsconsctl.conf << EOF
+keyboard.bell.volume=0
+EOF
 ```
 
 ### Configuration du mail en emission
@@ -97,63 +148,11 @@ permit persist keepenv tracnac
 EOF
 ```
 
-TODO default
-
-
-### login.conf
-Attention à la syntaxe... OpenBSD est POSIX
-```shell
-cd ~/
-mkdir backup
-cp /etc/login.conf /root/backup/login.conf
-sed -i -e '/staff:\\/,/#/{//!d;};' /etc/login.conf
-sed -i -e '/staff:\\/a\
-        :datasize-cur=2048M:\\\
-        :datasize-max=infinity:\\\
-        :maxproc-cur=256:\\\
-        :maxproc-max=1024:\\\
-        :openfiles-cur=4096:\\\
-        :openfiles-max=8192:\\\
-        :stacksize-cur=32M:\\\
-        :ignorenologin:\\\
-        :requirehome@:\\\
-        :tc=default:
-
-' /etc/login.conf
-```
-
-### sysctl.conf
-```shell
-cat > /etc/sysctl.conf << EOF
-# shared memory limits
-kern.shminfo.shmall=524288
-kern.shminfo.shmmax=1073741823
-kern.shminfo.shmmni=2048
-
-# semaphores
-kern.shminfo.shmseg=1024
-kern.seminfo.semmns=4096
-kern.seminfo.semmni=1024
-
-kern.maxproc=32768
-kern.maxfiles=65535
-kern.bufcachepercent=90
-kern.maxvnodes=262144
-kern.somaxconn=2048
-EOF
-```
-
-### fstab
-```shell
-cp /etc/fstab /root/backup/fstab
-sed -i -e 's/rw,/rw,softdep,noatime,/' /etc/fstab
-```
-
 ### MPD music
 # mpc load radioparadise
 # mpc play
 ```shell
-pkg_add mpd mpc
+cp /etc/mpd.conf /root/backup/mpd.conf
 sed -i 's/please-configure-your-music_directory/var\/spool\/mpd\/music/g' /etc/mpd.conf
 mkdir /var/spool/mpd/music
 cat > /var/spool/mpd/playlists/radioparadise.m3u <<EOF
@@ -168,7 +167,7 @@ rcctl enable mpd
 
 ### X11
 ```shell
-cp /etc/X11/xenodm/Xsetup_0 /root/Xsetup_0
+cp /etc/X11/xenodm/Xsetup_0 /root/backup/Xsetup_0
 sed -i 's/\(.*xconsole.*$\)/# \1/' /etc/X11/xenodm/Xsetup_0
 sed -i 's/\(.*xsetroot.*$\)/# \1/' /etc/X11/xenodm/Xsetup_0
 cat >> /etc/X11/xenodm/Xsetup_0 << EOF
@@ -208,14 +207,17 @@ EOF
 ```shell
 cd /etc/skel
 mkdir -p Desktop Documents Downloads Music Pictures/Captures Projects Public Templates Videos
-cat > /etc/skel/.kshrc <<EOF
-set -o emacs
-export HISTFILE="\${HOME}/.sh_history"
-export HISTSIZE=16384
-
-export PS1="{\A} \u@\l [\W] \\$ "
+cat > /etc/skel/.profile << EOF
+export ENV=\${HOME}/.kshrc
 EOF
-useradd -m -g users -G staff,operator -c 'Tracnac Dev Team' tracnac
+cat > /etc/skel/.kshrc <<EOF
+HISTFILE="\${HOME}/.sh_history"
+HISTSIZE=16384
+HISTCONTROL=erasedups:ignorespace
+
+PS1='{\A} \u@\l [\W] \\$ '
+EOF
+useradd -m -g users -G staffs -c 'Tracnac Dev Team' tracnac
 passwd tracnac
 ```
 
@@ -250,24 +252,19 @@ ln -s .dotfiles/OpenBSD/dot-kshrc .kshrc
 ln -s .dotfiles/OpenBSD/dot-profile .profile
 # vim :PlugUpgrade + :PlugInstall
 # tmux ctrl-b + I
-doas pkg_add clang-tools-extra go janet fish fzf bat rust
-fish
-curl -sL https://git.io/fisher | source && fisher install jorgebucaran/fisher
-fisher install PatrickF1/fzf.fish
-echo '/usr/local/bin/fish' | doas tee -a /etc/shells
-chsh -s /usr/local/bin/fish tracnac
-# cargo install fd-find Failed needed by fzf.fish
 ```
 
 ### Configure X
 ```shell
 # TODO: Remplacer polybar (bloat)
-doas pkg_add rofi dunst i3lock hsetroot scrot xclip xsel
 ln -s .dotfiles/fonts/dot-fonts .fonts
 rm .fonts/FantasqueSansMonoRegular.ttf
 fc-cache --force
 ln -s .dotfiles/OpenBSD/dot-cwmrc .cwmrc
 ln -s .dotfiles/OpenBSD/dot-xinitrc .xsession
+ln -s .dotfiles/OpenBSD/dot-Xresources .Xresources
+ln -s .dotfiles/OpenBSD/dot-Xdefaults .Xdefaults
+ln -s .dotfiles/OpenBSD/dot-inputrc .inputrc
 ln -s .dotfiles/wallpaper/dot-wallpaper.png .wallpaper.png
 mkdir .config
 cd ~/.config
@@ -278,7 +275,6 @@ cd ~
 
 #### Emacs
 ```shell
-doas pkg_add emacs ripgrep fzf shellcheck
 # git clone --depth 1 https://github.com/hlissner/doom-emacs
 # git clone https://github.com/rougier/nano-emacs.git
 # ~/.emacs.d/bin/doom install
@@ -301,14 +297,12 @@ cd ~/
 mkdir .go
 go env -w GOPATH="/home/tracnac/.go"
 go env -w GOMODCACHE="/home/tracnac/.go/pkg/mod"
-go install github.com/Code-Hex/go-install-tools@latest
-~/.go/bin/go-install-tools
-fish_add_path ~/.go/bin
+# go install github.com/Code-Hex/go-install-tools@latest
+# ~/.go/bin/go-install-tools
 ```
 
 #### ISYNC
 ```shell
-doas pkg_add isync neomutt notmuch w3m pandoc zathura feh
 ```
 Crontab :
 ```
@@ -365,3 +359,10 @@ find .mail/mailfence -not \( -path *cur* -o -path *new* -o -path *tmp* -o -path 
 ### TODO
 ### wsconsctl display.brightness=100%
 ### wsconsctl keyboard.backlight=0%
+
+### Repo
+```shell
+cd ~/Projects
+git clone https://github.com/junegunn/fzf.git # go build
+git clone https://github.com/BurntSushi/ripgrep # cargo build --release
+

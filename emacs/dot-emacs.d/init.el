@@ -20,7 +20,7 @@
                       ;; projectile
                       ;; counsel
                       ;; notmuch
-                      ;; eshell
+                      eshell
                       helpful
                       ;; exwm
                       ))
@@ -153,3 +153,6 @@
 ;;(exwm-config-default)
 (setq
  initial-scratch-message (format "Welcome to GNU Emacs T R /\\ C N /\\ C. Edition\nInitialization time: %s\n\n" (emacs-init-time)))
+
+(setq custom-file "~/.emacs.d/.emacs-custom.el")
+(load custom-file)
