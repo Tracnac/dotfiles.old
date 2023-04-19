@@ -19,7 +19,8 @@ fdisk -iy sd0
 ```shell
 syspatch
 fw_update
-pkg_add dbus colorls spleen git vim--gtk3 emacs--gtk3 mpd mpc clang-tools-extra go fzf ripgrep shellcheck rofi dunst polybar hsetroot scrot xclip xsel isync notmuch w3m pandoc zathura feh 
+mkdir /root/backup
+pkg_add dbus colorls spleen git vim--gtk3 emacs--gtk3 mpd mpc clang-tools-extra go fzf ripgrep shellcheck rofi dunst polybar hsetroot scrot xclip xsel isync notmuch w3m pandoc zathura feh texlive_base firefox thunderbird
 ```
 
 ### Services
@@ -32,7 +33,7 @@ rcctl enable messagebus
 ### login.conf
 Attention à la syntaxe... OpenBSD est POSIX
 ```shell
-cp /etc/login.conf /root/backup/login.conf
+cp /etc/login.conf ~/backup
 sed -i -e '/staff:\\/,/#/{//!d;};' /etc/login.conf
 sed -i -e '/staff:\\/a\
         :datasize-cur=2048M:\\\
@@ -63,8 +64,7 @@ kern.seminfo.semmni=1024
 
 kern.maxproc=32768
 kern.maxfiles=65535
-kern.bufcachepercent=90
-kern.maxvnodes=262144
+kern.bufcachepercent=80
 kern.somaxconn=2048
 EOF
 ```
@@ -77,21 +77,22 @@ rcctl restart ntpd
 
 ### fstab
 ```shell
-cp /etc/fstab /root/backup/fstab
+cp /etc/fstab ~/backup
 sed -i -e 's/rw,/rw,softdep,noatime,/' /etc/fstab
 ```
 ### Shell environment
 ```shell
 cd ~/
-mkdir backup
 cat > /etc/profile <<EOF
 export TZ=Europe/Paris
 export LANG=C
 EOF
 cat >> ${HOME}/.profile <<EOF
+
 export ENV=\${HOME}/.kshrc
 EOF
-cat > ${HOME}/.kshrc <<EOF
+cat >> ${HOME}/.kshrc <<EOF
+
 export PS1='{\A} \u@\l [\W] \\$ '
 EOF
 cat >> /etc/wsconsctl.conf << EOF
@@ -107,6 +108,7 @@ EOF
 chown root:_smtpd /etc/mail/secrets
 chmod 640 /etc/mail/secrets
 
+cp /etc/mail/smtpd.conf ~/backup
 cat > /etc/mail/smtpd.conf <<EOF
 #       $OpenBSD: smtpd.conf,v 1.14 2019/11/26 20:14:38 gilles Exp $
 
@@ -152,7 +154,7 @@ EOF
 # mpc load radioparadise
 # mpc play
 ```shell
-cp /etc/mpd.conf /root/backup/mpd.conf
+cp /etc/mpd.conf ~/backup/mpd.conf
 sed -i 's/please-configure-your-music_directory/var\/spool\/mpd\/music/g' /etc/mpd.conf
 mkdir /var/spool/mpd/music
 cat > /var/spool/mpd/playlists/radioparadise.m3u <<EOF
@@ -167,14 +169,14 @@ rcctl enable mpd
 
 ### X11
 ```shell
-cp /etc/X11/xenodm/Xsetup_0 /root/backup/Xsetup_0
+cp /etc/X11/xenodm/Xsetup_0 ~/backup/Xsetup_0
 sed -i 's/\(.*xconsole.*$\)/# \1/' /etc/X11/xenodm/Xsetup_0
 sed -i 's/\(.*xsetroot.*$\)/# \1/' /etc/X11/xenodm/Xsetup_0
 cat >> /etc/X11/xenodm/Xsetup_0 << EOF
 xsetroot -solid black
 xset b off
 EOF
-cp /etc/X11/xenodm/Xresources /root/backup/Xresources
+cp /etc/X11/xenodm/Xresources ~/backup/Xresources
 cat > /etc/X11/xenodm/Xresources <<EOF
 ! $OpenBSD: Xresources.in,v 1.3 2020/06/28 15:38:34 matthieu Exp $
 !
@@ -217,7 +219,7 @@ HISTCONTROL=erasedups:ignorespace
 
 PS1='{\A} \u@\l [\W] \\$ '
 EOF
-useradd -m -g users -G staffs -c 'Tracnac Dev Team' tracnac
+useradd -m -g users -G staffs -c 'Tracnac, Dev Team' tracnac
 passwd tracnac
 ```
 
@@ -225,17 +227,10 @@ passwd tracnac
 ```shell
 su - tracnac
 cd ~/
-echo 'set from=tracnac@devmobs.fr' >> ${HOME}/.mailrc
-echo 'set replyto=tracnac@devmobs.fr' >> ${HOME}/.mailrc
+chezmoi init tracnac
 
-cat > ~/.gitconfig <<EOF
-[user]
-        email = tracnac@devmobs.fr
-        name = Tracnac
-        signingkey = 8E7873806AA124421519A62DA9BCFEFD2464C1B2
-[commit]
-        gpgsign = true
-EOF
+// TODO:
+
 git clone https://github.com/tracnac/dotfiles .dotfiles
 cd .dotfiles
 git submodule init

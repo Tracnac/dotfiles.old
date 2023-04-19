@@ -23,6 +23,7 @@
                       eshell
                       helpful
                       ;; exwm
+                      helm
                       ))
 
 (dolist (package packages-list)
