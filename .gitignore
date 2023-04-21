@@ -15,3 +15,4 @@ pkgsrc/lukest/st/
 **/*.swp
 vim/dot-vim/.yank_v2.txt
 OpenBSD/OpenBSD.md
+bin/dot-bin/chezmoi

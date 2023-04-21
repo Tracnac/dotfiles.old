@@ -231,20 +231,16 @@ chezmoi init tracnac
 
 // TODO:
 
-git clone https://github.com/tracnac/dotfiles .dotfiles
+git clone https://github.com/tracnac/dotfiles.old .dotfiles
 cd .dotfiles
 git submodule init
 git submodule update
 # git submodule update --init
 cd ~/
 ln -s .dotfiles/bin/dot-bin .bin
-ln -s .dotfiles/vim/dot-vim .vim
-ln -s .dotfiles/vim/dot-vimrc  .vimrc
-ln -s .dotfiles/tmux/dot-tmux .tmux
-ln -s .dotfiles/tmux/dot-tmux.conf .tmux.conf
-rm .kshrc .profile
-ln -s .dotfiles/OpenBSD/dot-kshrc .kshrc
-ln -s .dotfiles/OpenBSD/dot-profile .profile
+# rm .kshrc .profile
+# ln -s .dotfiles/OpenBSD/dot-kshrc .kshrc
+# ln -s .dotfiles/OpenBSD/dot-profile .profile
 # vim :PlugUpgrade + :PlugInstall
 # tmux ctrl-b + I
 ```
@@ -257,8 +253,6 @@ rm .fonts/FantasqueSansMonoRegular.ttf
 fc-cache --force
 ln -s .dotfiles/OpenBSD/dot-cwmrc .cwmrc
 ln -s .dotfiles/OpenBSD/dot-xinitrc .xsession
-ln -s .dotfiles/OpenBSD/dot-Xresources .Xresources
-ln -s .dotfiles/OpenBSD/dot-Xdefaults .Xdefaults
 ln -s .dotfiles/OpenBSD/dot-inputrc .inputrc
 ln -s .dotfiles/wallpaper/dot-wallpaper.png .wallpaper.png
 mkdir .config
