@@ -1,38 +1,52 @@
 # Voidlinux
 
-## rc.local
-```
-TZ=Europe/Paris
-LANG=en_US.UTF-8
-EDITOR="nvim"
-export TZ LANG EDITOR
+## rc.local et profile
+``` shell
+cat >> /etc/rc.local <<EOF
+# DBUS
+install -d -m 0700 -o root -g root /run/user/0
+install -d -m 0700 -o tracnac -g users /run/user/1000
+EOF
+
+cat >> /etc/locale.conf <<EOF
+LC_MONETARY=fr_FR.UTF-8
+LC_PAPER=fr_FR.UTF-8
+LC_MEASUREMENT=fr_FR.UTF-8
+LC_TIME=fr_FR.UTF-8
+LC_NUMERIC=fr_FR.UTF-8
+EOF
+cat > /etc/profile.d/xdg_runtime_dir.sh <<EOF
+#!/bin/sh
+
+XDG_RUNTIME_DIR="/run/user/$(id -u)"
+export XDG_RUNTIME_DIR
+EOF
 ```
 
 #If static...  
 #ip link set dev eth0 up  
 #ip addr add 192.168.86.4/24 brd + dev eth0  
 #ip route add default via 192.168.86.1  
-
 ## Packages de base
 ```shell
 # keys.openpgp.org pgp.mit.edu keyring.debian.org keyserver.ubuntu.com
-xbps-install gnupg2 pinentry pass pass-git-helper git-crypt
+xbps-install gnupg2 pinentry pass pass-git-helper git-crypt chezmoi age
 ```
-
 ## Services de base
 ```shell
-xbps-install chrony dbus mpd cups cups-filters connman cronie acpid tlp
+xbps-install chrony dbus mpd cups cups-filters connman cronie acpid tlp socklog-void
+rm /var/service/dhcpcd
 ln -s /etc/sv/ntpd /var/service
 ln -s /etc/sv/dbus /var/service
 ln -s /etc/sv/mpd /var/service
 ln -s /etc/sv/cupsd /var/service
-rm /var/service/dhcpcd
 ln -s /etc/sv/connmand /var/service
-ln -s /etc/sv/cronie /var/service
+ln -s /etc/sv/crond /var/service
 ln -s /etc/sv/acpid /var/service
 ln -s /etc/sv/tlp /var/service
+ln -s /etc/sv/socklog-unix /var/service
+ln -s /etc/sv/nanoklogd /var/service
 ```
-
 ## Pour le Wifi
 ```shell
 connmanctl  
@@ -42,11 +56,10 @@ services
 agent on
 connect <wifi_id>
 ```
-
 ## Mail
 ```shell
 # TODO: Aliases
-xbps-install msmtp
+xbps-install msmtp isync
 cat > /etc/msmtprc << EOF
 account default
 auth on
@@ -60,6 +73,7 @@ tls_trust_file /etc/ssl/certs/ca-certificates.crt
 from tracnac@devmobs.fr
 syslog LOG_MAIL
 EOF
+chmod 0400 /etc/msmtprc
 ```
 
 ## Dev & Userland
@@ -67,18 +81,17 @@ EOF
 xbps-install vim tmux git stow bash-completion unzip
 xbps-install wget curl
 xbps-install alsa-utils
-xbps-install make autoconf automake pkg-config hyperfine strace meson ctags
-# xbps-install clang clang-analyzer clang-tools-extra llvm lldb
-# xbps-install janet nodejs go
-# xbps-install gdb rr 
+xbps-install make autoconf automake pkg-config hyperfine strace meson ctags fzf ripgrep
+xbps-install clang clang-analyzer clang-tools-extra llvm lldb gcc
+xbps-install go
+xbps-install gdb rr
 xbps-install qemu
 ```
 
 ## Emacs
 ```shell
-xbps-install emacs-x11 mu mu4e
+xbps-install emacs-x11 mu4e
 ```
-
 ## X11 Minimum vital
 ```shell
 xbps-install xorg-server xf86-input-evdev
@@ -160,7 +173,7 @@ pkill mpd
 
 ## Creation user
 ```shell
-adduser -m -g users -G audio,video,wheel,kvm tracnac
+useradd -m -g users -G audio,video,wheel,kvm,plugdev tracnac
 passwd tracnac
 ```
 # Userland
@@ -168,8 +181,10 @@ passwd tracnac
 
 ```shell
 # TODO: Make a shell script
+
 cd ~/
-git clone https://github.com/tracnac/dotfiles .dotfiles
+xdg-user-dirs-update
+git clone https://github.com/tracnac/dotfiles.old .dotfiles
 cd .dotfiles
 git submodule init
 git submodule update
@@ -201,9 +216,6 @@ cd ~/
 - Adjust font setting 
 
 ## ISYNC
-```shell
-xbps-install isync neomutt
-```
 
 Crontab :
 ```
@@ -212,12 +224,11 @@ Crontab :
 ```
 
 ```shell
-mkdir ~/.mail/mailfence
 cat > ~/.mbsyncrc <<EOF
 IMAPAccount mailfence
 Host imap.mailfence.com
-User *******
-Pass *******
+User *****
+Pass *****
 SSLType IMAPS
 CertificateFile /etc/ssl/certs/ca-certificates.crt
 
@@ -243,10 +254,12 @@ EOF
 ```shell
 # TODO: Notmuch for better integration with neomutt
 mkdir -p ~/.mail/mailfence
+chmod 0400 ~/.mbsyncrc
+chmod 0700 ~/.mail
+chmod 0700 ~/.mail/mailfence
 mu init --maildir=~/.mail/mailfence --my-address=tracnac@devmobs.fr
 mu index
 ```
-
 ## NEOMUTT
 ```shell
 mkdir -p .config/neomutt
@@ -331,7 +344,6 @@ mkdir ~/.gnupg
 cat > ~/.gnupg/gpg.conf <<EOF
 utf8-strings
 debug-level basic
-log-file socket:///home/tracnac/.gnupg/log-socket
 keyserver hkp://keys.gnupg.net
 cert-digest-algo SHA256
 no-emit-version
@@ -343,9 +355,18 @@ allow-freeform-uid
 EOF
 cat > ~/.gnupg/gpg-agent.conf <<EOF
 debug-level basic
-log-file socket:///home/tracnac/.gnupg/log-socket
 default-cache-ttl 28800
 max-cache-ttl 28800
-pinentry-program /usr/bin/pinentry-curses
+pinentry-program /usr/bin/pinentry
+EOF
+cat >> ~/.bashrc <<EOF
+# GPGAgent
+export GPG_TTY=$(tty)
+if ! pgrep -x -u "${USER}" gpg-agent &> /dev/null; then
+  gpg-connect-agent /bye &> /dev/null
+fi
+if [ "${gnupg_SSH_AUTH_SOCK_by:-0}" -ne $$ ]; then
+  export SSH_AUTH_SOCK="$(gpgconf --list-dirs agent-ssh-socket)"
+fi
 EOF
 ```
