@@ -1,5 +1,4 @@
 # Voidlinux
-
 ## rc.local et profile
 ``` shell
 cat >> /etc/rc.local <<EOF
@@ -8,6 +7,7 @@ install -d -m 0700 -o root -g root /run/user/0
 install -d -m 0700 -o tracnac -g users /run/user/1000
 EOF
 
+sed -i 's/#fr_FR.UTF-8/fr_FR-UTF8/g' /etc/default/libc-locales
 cat >> /etc/locale.conf <<EOF
 LC_MONETARY=fr_FR.UTF-8
 LC_PAPER=fr_FR.UTF-8
@@ -15,6 +15,8 @@ LC_MEASUREMENT=fr_FR.UTF-8
 LC_TIME=fr_FR.UTF-8
 LC_NUMERIC=fr_FR.UTF-8
 EOF
+xbps-reconfigure --force glibc-locales
+
 cat > /etc/profile.d/xdg_runtime_dir.sh <<EOF
 #!/bin/sh
 
@@ -30,22 +32,22 @@ EOF
 ## Packages de base
 ```shell
 # keys.openpgp.org pgp.mit.edu keyring.debian.org keyserver.ubuntu.com
-xbps-install gnupg2 pinentry pass pass-git-helper git-crypt chezmoi age
+xbps-install gnupg2 pinentry pass pass-git-helper git-crypt git chezmoi age
 ```
 ## Services de base
 ```shell
 xbps-install chrony dbus mpd cups cups-filters connman cronie acpid tlp socklog-void
-rm /var/service/dhcpcd
 ln -s /etc/sv/ntpd /var/service
 ln -s /etc/sv/dbus /var/service
 ln -s /etc/sv/mpd /var/service
 ln -s /etc/sv/cupsd /var/service
-ln -s /etc/sv/connmand /var/service
 ln -s /etc/sv/crond /var/service
 ln -s /etc/sv/acpid /var/service
 ln -s /etc/sv/tlp /var/service
 ln -s /etc/sv/socklog-unix /var/service
 ln -s /etc/sv/nanoklogd /var/service
+rm /var/service/dhcpcd
+ln -s /etc/sv/connmand /var/service
 ```
 ## Pour le Wifi
 ```shell
@@ -78,19 +80,19 @@ chmod 0400 /etc/msmtprc
 
 ## Dev & Userland
 ```shell
-xbps-install vim tmux git stow bash-completion unzip
+xbps-install vim tmux stow bash-completion unzip
 xbps-install wget curl
 xbps-install alsa-utils
 xbps-install make autoconf automake pkg-config hyperfine strace meson ctags fzf ripgrep
-xbps-install clang clang-analyzer clang-tools-extra llvm lldb gcc
+xbps-install clang clang-analyzer clang-tools-extra llvm lldb # gcc
 xbps-install go
-xbps-install gdb rr
+xbps-install rr # gdb
 xbps-install qemu
 ```
 
 ## Emacs
 ```shell
-xbps-install emacs-x11 mu4e
+xbps-install emacs-x11 # mu4e
 ```
 ## X11 Minimum vital
 ```shell
@@ -118,7 +120,7 @@ xbps-install nvidia
 cd /etc/skel
 mkdir -p Desktop Documents Downloads Music Pictures/Captures Public Templates Videos
 cd
-xbps-install bspwm cwm picom dunst rofi sxhkd hsetroot scrot polybar mpc st xdg-utils xdg-user-dirs i3lock xterm
+xbps-install bspwm cwm picom dunst rofi sxhkd hsetroot scrot mpc xdg-utils xdg-user-dirs i3lock xterm # polybar st
 ```
 
 ## Compilation de st
@@ -199,7 +201,6 @@ ln -s .dotfiles/tmux/dot-tmux.conf .tmux.conf
 #tmux ctrl-b + I
 ln -s .dotfiles/cwmrc/dot-cwmrc .cwmrc
 ln -s .dotfiles/wallpaper/dot-wallpaper.png .wallpaper.png
-mkdir .config
 cd ~/.config
 ln -s ../.dotfiles/rofi/dot-config/rofi
 ln -s ../.dotfiles/dunst/dot-config/dunst
@@ -250,6 +251,7 @@ Remove Near
 SyncState *
 Sync All
 EOF
+chmod 0400 ~/.mbsyncrc
 ```
 ```shell
 # TODO: Notmuch for better integration with neomutt
