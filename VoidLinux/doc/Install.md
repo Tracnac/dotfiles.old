@@ -7,7 +7,7 @@ install -d -m 0700 -o root -g root /run/user/0
 install -d -m 0700 -o tracnac -g users /run/user/1000
 EOF
 
-sed -i 's/#fr_FR.UTF-8/fr_FR-UTF8/g' /etc/default/libc-locales
+sed -i 's/#fr_FR.UTF-8/fr_FR.UTF-8/g' /etc/default/libc-locales
 cat >> /etc/locale.conf <<EOF
 LC_MONETARY=fr_FR.UTF-8
 LC_PAPER=fr_FR.UTF-8
@@ -20,7 +20,7 @@ xbps-reconfigure --force glibc-locales
 cat > /etc/profile.d/xdg_runtime_dir.sh <<EOF
 #!/bin/sh
 
-XDG_RUNTIME_DIR="/run/user/$(id -u)"
+XDG_RUNTIME_DIR="/run/user/\$(id -u \${USER})"
 export XDG_RUNTIME_DIR
 EOF
 ```
@@ -32,11 +32,11 @@ EOF
 ## Packages de base
 ```shell
 # keys.openpgp.org pgp.mit.edu keyring.debian.org keyserver.ubuntu.com
-xbps-install gnupg2 pinentry pass pass-git-helper git-crypt git chezmoi age
+xbps-install -y gnupg2 pinentry pass pass-git-helper git-crypt git chezmoi age pam-u2f
 ```
 ## Services de base
 ```shell
-xbps-install chrony dbus mpd cups cups-filters connman cronie acpid tlp socklog-void
+xbps-install -y chrony dbus mpd cups cups-filters connman cronie acpid tlp socklog-void
 ln -s /etc/sv/ntpd /var/service
 ln -s /etc/sv/dbus /var/service
 ln -s /etc/sv/mpd /var/service
@@ -58,55 +58,36 @@ services
 agent on
 connect <wifi_id>
 ```
-## Mail
-```shell
-# TODO: Aliases
-xbps-install msmtp isync
-cat > /etc/msmtprc << EOF
-account default
-auth on
-host smtp.mailfence.com
-from tracnac@devmobs.fr
-user ********
-password ********
-tls on
-tls_starttls off
-tls_trust_file /etc/ssl/certs/ca-certificates.crt
-from tracnac@devmobs.fr
-syslog LOG_MAIL
-EOF
-chmod 0400 /etc/msmtprc
-```
-
 ## Dev & Userland
 ```shell
-xbps-install vim tmux stow bash-completion unzip
-xbps-install wget curl
-xbps-install alsa-utils
-xbps-install make autoconf automake pkg-config hyperfine strace meson ctags fzf ripgrep
-xbps-install clang clang-analyzer clang-tools-extra llvm lldb # gcc
-xbps-install go
-xbps-install rr # gdb
-xbps-install qemu
+xbps-install -y tmux stow bash-completion unzip
+xbps-install -y wget curl
+xbps-install -y alsa-utils
+xbps-install -y make autoconf automake pkg-config hyperfine strace meson ctags fzf ripgrep
+# xbps-install clang clang-analyzer clang-tools-extra llvm lldb
+xbps-install -y gcc gdb
+xbps-install -y go
+xbps-install -y rr
+xbps-install -y qemu
 ```
 
-## Emacs
+## Editor
 ```shell
-xbps-install emacs-x11 # mu4e
+xbps-install -y emacs-x11 vim-x11
 ```
 ## X11 Minimum vital
 ```shell
-xbps-install xorg-server xf86-input-evdev
-xbps-install xinit xsel xclip xset xrandr xauth xdotool xev xprop xrdb setxkbmap xsetroot xbacklight xinput
+xbps-install -y xorg-server xf86-input-evdev
+xbps-install -y xinit xsel xclip xset xrandr xauth xdotool xev xprop xrdb setxkbmap xsetroot xbacklight xinput
 ```
 
 ## X11 Video
 ### Specifique à Intel
 ``` Shell
-xbps-install intel-video-accel
-xbps-install mesa mesa-dri
-xbps-install vulkan-loader
-xbps-install mesa-vulkan-intel
+xbps-install -y intel-video-accel
+xbps-install -y mesa-vulkan-intel
+xbps-install -y vulkan-loader
+xbps-install -y mesa mesa-dri
 ```
 ### Specifique a NVIDIA
 ```shell
@@ -114,20 +95,13 @@ xbps-install void-repo-nonfree
 xbps-install -Sv
 xbps-install nvidia
 ```
-
 ## Desktop
 ```shell
 cd /etc/skel
 mkdir -p Desktop Documents Downloads Music Pictures/Captures Public Templates Videos
 cd
-xbps-install bspwm cwm picom dunst rofi sxhkd hsetroot scrot mpc xdg-utils xdg-user-dirs i3lock xterm # polybar st
+xbps-install -y bspwm cwm picom dunst rofi sxhkd hsetroot scrot mpc xdg-utils xdg-user-dirs i3lock xterm alacritty # polybar st
 ```
-
-## Compilation de st
-```shell
-xbps-install libXft-devel fontconfig-devel harfbuzz-devel
-```
-
 ## Audio et MPD
 ```shell
 # Only with NVIDIA
@@ -185,37 +159,77 @@ passwd tracnac
 # TODO: Make a shell script
 
 cd ~/
+chezmoi init tracnac
+chezmoi apply
 xdg-user-dirs-update
-git clone https://github.com/tracnac/dotfiles.old .dotfiles
+git clone ssh://git@github.com/tracnac/dotfiles.old .dotfiles
 cd .dotfiles
 git submodule init
 git submodule update
 # git submodule update --init
 cd ~/
-ln -s .dotfiles/bin/dot-bin .bin
-ln -s .dotfiles/vim/dot-vim .vim
-ln -s .dotfiles/vim/dot-vimrc  .vimrc
-ln -s .dotfiles/tmux/dot-tmux .tmux
-ln -s .dotfiles/tmux/dot-tmux.conf .tmux.conf
 #vim :PlugUpgrade + :PlugInstall
 #tmux ctrl-b + I
+ln -s .dotfiles/bin/dot-bin .bin
 ln -s .dotfiles/cwmrc/dot-cwmrc .cwmrc
 ln -s .dotfiles/wallpaper/dot-wallpaper.png .wallpaper.png
 cd ~/.config
 ln -s ../.dotfiles/rofi/dot-config/rofi
 ln -s ../.dotfiles/dunst/dot-config/dunst
-ln -s ../.dotfiles/polybar/dot-config/polybar
+# ln -s ../.dotfiles/polybar/dot-config/polybar
 cd ~/
 ```
-
 # Imprimante
 - http://localhost:631
 - And load the PPD File
-
 ## Divers
 - Copy xorg files and keyboard usfr
 - Adjust font setting 
 
+# U2F
+```shell
+pamu2fcfg > ~/u2f_keys
+sudo cp u2f_keys /etc/u2f_keys
+sudo chmod 0400 /etc/u2f_keys
+```
+Add to /etc/pam.d/system-auth:
+```
+auth      sufficient pam_u2f.so     authfile=/etc/u2f_keys cue
+```
+# PGP (check with: echo "test" | gpg --clearsign)
+
+``` shell
+cat >> ~/.bashrc <<EOF
+# GPGAgent
+export GPG_TTY=$(tty)
+if ! pgrep -x -u "${USER}" gpg-agent &> /dev/null; then
+  gpg-connect-agent /bye &> /dev/null
+fi
+if [ "${gnupg_SSH_AUTH_SOCK_by:-0}" -ne $$ ]; then
+  export SSH_AUTH_SOCK="$(gpgconf --list-dirs agent-ssh-socket)"
+fi
+EOF
+```
+## Mail
+```shell
+# TODO: Aliases
+xbps-install -y msmtp isync notmuch mu4e
+
+cat > ~/.msmtprc << EOF
+account default
+auth on
+host smtp.mailfence.com
+from tracnac@devmobs.fr
+user ********
+password ********
+tls on
+tls_starttls off
+tls_trust_file /etc/ssl/certs/ca-certificates.crt
+from tracnac@devmobs.fr
+syslog LOG_MAIL
+EOF
+chmod 0400 ~/.msmtprc
+```
 ## ISYNC
 
 Crontab :
@@ -256,35 +270,22 @@ chmod 0400 ~/.mbsyncrc
 ```shell
 # TODO: Notmuch for better integration with neomutt
 mkdir -p ~/.mail/mailfence
-chmod 0400 ~/.mbsyncrc
 chmod 0700 ~/.mail
 chmod 0700 ~/.mail/mailfence
-mu init --maildir=~/.mail/mailfence --my-address=tracnac@devmobs.fr
+mu init --maildir=.mail/mailfence --my-address=tracnac@devmobs.fr
 mu index
 ```
-## NEOMUTT
-```shell
-mkdir -p .config/neomutt
-cat > .config/neomutt/neomuttrc << EOF
-set header_cache = "/home/tracnac/.cache/neomutt/headers/"
-set message_cachedir = "/home/tracnac/.cache/neomutt/messages/"
+## MUTT
+``` shell
+cat > ~/.muttrc << EOF 
+set mbox_type=Maildir
+set header_cache=~/.cache/mutt
+set folder='/home/tracnac/.mail/mailfence'
+
 set editor = "\$EDITOR"
 set implicit_autoview = yes
 alternative_order text/enriched text/plain text
-set delete = yes
-# Binds
-# Macros
-# Mailbox
-mailboxes "/home/tracnac/.mail/mailfence/Inbox"
-folder-hook /home/tracnac/.mail/mailfence/ " \
-    source /home/tracnac/.config/neomutt/tracnac "
 
-# Source primary account
-source /home/tracnac/.config/neomutt/tracnac
-
-# Extra configuration
-EOF
-cat > /home/tracnac/.config/neomutt/tracnac << EOF
 set ssl_force_tls = yes
 set certificate_file=/etc/ssl/certs/ca-certificates.crt
 
@@ -293,82 +294,17 @@ set crypt_use_gpgme = yes
 set crypt_autosign = no
 set crypt_opportunistic_encrypt = no
 set pgp_use_gpg_agent = yes
-set mbox_type = Maildir
 set sort = "threads"
 
 # MTA section
 set sendmail='msmtp --read-envelope-from --read-recipients'
 
 # MRA section
-set folder='/home/tracnac/.mail/mailfence'
-set from='tracnac@devmobs.fr'
-set postponed='+Drafts'
 set realname='Tracnac'
+set from='tracnac@devmobs.fr'
+mailboxes "/home/tracnac/.mail/mailfence/Inbox"
+set postponed='+Drafts'
 set record='+Sent Items'
 set spoolfile='+Inbox'
 set trash='+Trash'
-
-
-# Extra configuration
-
-# notmuch section
-# set nm_default_uri = "notmuch:///home/tracnac/.mail"
-# virtual-mailboxes "My INBOX" "notmuch://?query=tag:inbox"
 EOF
-```
-
-## Install git
-```shell
-cd ~/
-cat > .gitconfig <<EOF
-[user]
-        email = tracnac@devmobs.fr
-        name = Tracnac
-        signingkey = 8E7873806AA124421519A62DA9BCFEFD2464C1B2
-[commit]
-        gpgsign = true
-EOF
-```
-
-# U2F
-```shell
-pamu2fcfg > ~/u2f_keys
-sudo cp u2f_keys /etc/u2f_keys
-```
-Add to /etc/pam.d/system-auth:
-```
-auth      sufficient pam_u2f.so     authfile=/etc/u2f_keys cue
-```
-
-# PGP (check with: echo "test" | gpg --clearsign)
-```shell
-mkdir ~/.gnupg
-cat > ~/.gnupg/gpg.conf <<EOF
-utf8-strings
-debug-level basic
-keyserver hkp://keys.gnupg.net
-cert-digest-algo SHA256
-no-emit-version
-no-comments
-personal-cipher-preferences AES AES256 AES192 CAST5
-personal-digest-preferences SHA256 SHA512 SHA384 SHA224
-ignore-time-conflict
-allow-freeform-uid
-EOF
-cat > ~/.gnupg/gpg-agent.conf <<EOF
-debug-level basic
-default-cache-ttl 28800
-max-cache-ttl 28800
-pinentry-program /usr/bin/pinentry
-EOF
-cat >> ~/.bashrc <<EOF
-# GPGAgent
-export GPG_TTY=$(tty)
-if ! pgrep -x -u "${USER}" gpg-agent &> /dev/null; then
-  gpg-connect-agent /bye &> /dev/null
-fi
-if [ "${gnupg_SSH_AUTH_SOCK_by:-0}" -ne $$ ]; then
-  export SSH_AUTH_SOCK="$(gpgconf --list-dirs agent-ssh-socket)"
-fi
-EOF
-```
