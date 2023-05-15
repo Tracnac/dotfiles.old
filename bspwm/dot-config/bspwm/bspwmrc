@@ -1,18 +1,15 @@
 #! /bin/sh
 
-background="#1F1F1F"
-foreground="#FFFFFF"
-foreground_alt="#8F8F8F"
-module_fg="#1F1F1F"
-primary="#ffb300"
-secondary="#E53935"
-alternate="#7cb342"
+background="#d8dee9"
+foreground_alt="#4c566a"
+primary="#ebcb8b"
+secondary="#bf616a"
 
-bspc monitor DP-4 -d ' ' ' ' ' ' ' ' ' '
+# bspc monitor DP-4 -d ' ' ' ' ' ' ' ' ' '
 # bspc monitor HDMI-0 -d ' ' ' ' ' ' ' ' ' '
 
-bspc config border_width         1
-bspc config window_gap          10
+bspc config border_width         2
+bspc config window_gap           2
 bspc config split_ratio          0.58
 
 bspc config focused_border_color "$primary" 
@@ -25,6 +22,8 @@ bspc config gapless_monocle true
 bspc config single_monocle false
 
 # bspc config focus_follows_pointer true
+bspc config remove_disabled_monitors true
+bspc config remove_unplugged_monitors true
 
 bspc config pointer_modifier mod4
 bspc config pointer_action1 move
@@ -35,7 +34,7 @@ bspc rule -r *:*
 
 # bspc rule -a Gimp desktop='^8' state=floating follow=on
 # bspc rule -a Chromium desktop='^2'
-bspc rule -a Lxappearance state=floating
-bspc rule -a st-float state=floating
+# bspc rule -a Lxappearance state=floating
+bspc rule -a alacritty-floating state=floating
 # bspc rule -a Kupfer.py focus=on
 # bspc rule -a Screenkey manage=off

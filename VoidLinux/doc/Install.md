@@ -78,7 +78,7 @@ xbps-install -y emacs-x11 vim-x11
 ## X11 Minimum vital
 ```shell
 xbps-install -y xorg-server xf86-input-evdev
-xbps-install -y xinit xsel xclip xset xrandr xauth xdotool xev xprop xrdb setxkbmap xsetroot xbacklight xinput
+xbps-install -y xinit xsel xclip xset xrandr xauth xdotool xev xprop xrdb setxkbmap xsetroot xbacklight xinput xdpyinfo xtools 
 ```
 
 ## X11 Video
@@ -101,6 +101,7 @@ cd /etc/skel
 mkdir -p Desktop Documents Downloads Music Pictures/Captures Public Templates Videos
 cd
 xbps-install -y bspwm cwm picom dunst rofi sxhkd hsetroot scrot mpc xdg-utils xdg-user-dirs i3lock xterm alacritty # polybar st
+xbps-install -y msmtp isync notmuch mu4e
 ```
 ## Audio et MPD
 ```shell
@@ -173,15 +174,12 @@ cd ~/
 ln -s .dotfiles/bin/dot-bin .bin
 ln -s .dotfiles/cwmrc/dot-cwmrc .cwmrc
 ln -s .dotfiles/wallpaper/dot-wallpaper.png .wallpaper.png
-cd ~/.config
-ln -s ../.dotfiles/rofi/dot-config/rofi
-ln -s ../.dotfiles/dunst/dot-config/dunst
-# ln -s ../.dotfiles/polybar/dot-config/polybar
 cd ~/
 ```
 # Imprimante
 - http://localhost:631
 - And load the PPD File
+
 ## Divers
 - Copy xorg files and keyboard usfr
 - Adjust font setting 
@@ -210,26 +208,7 @@ if [ "${gnupg_SSH_AUTH_SOCK_by:-0}" -ne $$ ]; then
 fi
 EOF
 ```
-## Mail
-```shell
-# TODO: Aliases
-xbps-install -y msmtp isync notmuch mu4e
 
-cat > ~/.msmtprc << EOF
-account default
-auth on
-host smtp.mailfence.com
-from tracnac@devmobs.fr
-user ********
-password ********
-tls on
-tls_starttls off
-tls_trust_file /etc/ssl/certs/ca-certificates.crt
-from tracnac@devmobs.fr
-syslog LOG_MAIL
-EOF
-chmod 0400 ~/.msmtprc
-```
 ## ISYNC
 
 Crontab :
@@ -239,35 +218,6 @@ Crontab :
 ```
 
 ```shell
-cat > ~/.mbsyncrc <<EOF
-IMAPAccount mailfence
-Host imap.mailfence.com
-User *****
-Pass *****
-SSLType IMAPS
-CertificateFile /etc/ssl/certs/ca-certificates.crt
-
-IMAPStore mailfence-remote
-Account mailfence
-
-MaildirStore mailfence-local
-SubFolders Verbatim
-Path ~/.mail/mailfence/
-Inbox ~/.mail/mailfence/Inbox
-
-Channel mailfence
-Far :mailfence-remote:
-Near :mailfence-local:
-Patterns *
-Create Near
-Expunge Near
-Remove Near
-SyncState *
-Sync All
-EOF
-chmod 0400 ~/.mbsyncrc
-```
-```shell
 # TODO: Notmuch for better integration with neomutt
 mkdir -p ~/.mail/mailfence
 chmod 0700 ~/.mail
@@ -275,36 +225,9 @@ chmod 0700 ~/.mail/mailfence
 mu init --maildir=.mail/mailfence --my-address=tracnac@devmobs.fr
 mu index
 ```
-## MUTT
-``` shell
-cat > ~/.muttrc << EOF 
-set mbox_type=Maildir
-set header_cache=~/.cache/mutt
-set folder='/home/tracnac/.mail/mailfence'
 
-set editor = "\$EDITOR"
-set implicit_autoview = yes
-alternative_order text/enriched text/plain text
-
-set ssl_force_tls = yes
-set certificate_file=/etc/ssl/certs/ca-certificates.crt
-
-# GPG section
-set crypt_use_gpgme = yes
-set crypt_autosign = no
-set crypt_opportunistic_encrypt = no
-set pgp_use_gpg_agent = yes
-set sort = "threads"
-
-# MTA section
-set sendmail='msmtp --read-envelope-from --read-recipients'
-
-# MRA section
-set realname='Tracnac'
-set from='tracnac@devmobs.fr'
-mailboxes "/home/tracnac/.mail/mailfence/Inbox"
-set postponed='+Drafts'
-set record='+Sent Items'
-set spoolfile='+Inbox'
-set trash='+Trash'
-EOF
+# GTK3/4 Nord theme
+mkdir ~/.themes
+cd ~/.themes
+git clone https://github.com/EliverLara/Nordic.git
+# lxappearance...

@@ -1,88 +1,92 @@
-XF86AudioMute 
-        amixer -c 1 -q set 'Master' toggle
+wmname LG3D
+
+XF86AudioMute
+ amixer -c 1 -q set 'Master' toggle
 XF86Audio{Lower,Raise}Volume
-        amixer -c 1 -q set 'Master' {5%-,5%+}
+ amixer -c 1 -q set 'Master' {5%-,5%+}
 
 XF86MonBrightness{Up,Down}
-        xbacklight {-inc,-dec} 5
+ xbacklight {-inc,-dec} 5
 
 XF86Audio{Prev,Next,Stop,Play}
-        mpc {prev,next,stop,toggle}
+ mpc {prev,next,stop,toggle}
 
 Print + {_,super,super + shift}
-        sleep 0.2 ; xdotool key XF86Ungrab ; scrot -z -f -e 'mv $f ~/Pictures/Captures' {_,-u,-s -l style=dash,width=2}
+ sleep 0.2 ; xdotool key XF86Ungrab ; scrot -z -f -e 'mv $f ~/Pictures/Captures' {_,-u,-s -l style=dash,width=2}
 
 Return + {super,super + shift}
-         st {_,-c "st-float"}
+     /usr/bin/alacritty {_, --class 'alacritty-floating'}
 
-space + super
-        ~/.config/polybar/material/scripts/launcher.sh
-
-#  
+space + {super, super + shift}
+   /usr/bin/rofi -show {drun, run}
+#
 # BSPWM
 #
 
 # Quit/Restart bspwm / Reload polybar, sxhkd
-{q,r} + super + alt + ctrl
-	bspc {quit,wm -r} ;\
-	~/.config/polybar/material/launch.sh ;\
-        pkill -u "${UID}" sxhkd ; while pgrep -u $UID -x sxhkd >/dev/null; do sleep 1; done ; sxhkd &
+{q,r} + super 
+  bspc {quit,_}
+  pkill --signal SIGUSR1 -u $(id -u) sxhkd
 
 # close or kill
 w + {super,super + shift}
-	bspc node -{c,k}
+ bspc node -{c,k}
 
 # Node
 
 # Split horizontal, vertical or cancel
 {h,v,q} + super
-	bspc node -p {east,south,cancel}
+ bspc node -p {east,south,cancel}
 
 # Preselect the ratio
 r + super ; {1-9}
-	bspc node -o 0.{1-9}
+ bspc node -o 0.{1-9}
 
 # Toggle beetwen floating & tiled
 f + super
-    bspc node -t "~floating"
+  bspc node -t "~floating"
 
 # Tiled & pseudo tiled mode
 t + {super,super + shift}
-    bspc node -t {tiled,~tiled}
+  bspc node -t {tiled,~tiled}
 
 # Send the window to another edge of the screen
 super + {_,shift} + {j,k,i,l}
-	bspc node -{f,s} {west,south,north,east}
+ bspc node -{f,s} {west,south,north,east}
 
 # Switch to last opened node
 Tab + super
-	bspc node -f last
+ bspc node -f last
 
-# Expand / Contract 
+# Expand / Contract
 {Left,Down,Up,Right} + super
-  bspc node -z {left -20 0 || bspc node -z right -20 0,\
-                bottom 0 20 || bspc node -z top 0 20,\
-                top 0 -20 || bspc node -z bottom 0 -20,\
-                right 20 0 || bspc node -z left 20 0}
+ bspc node -z {left -20 0 || bspc node -z right -20 0,\
+        bottom 0 20 || bspc node -z top 0 20,\
+        top 0 -20 || bspc node -z bottom 0 -20,\
+        right 20 0 || bspc node -z left 20 0}
 
 # Desktop
 
 # Send focused window to another workspace
 super + {_,shift + }{1-5}
-	bspc {desktop -f,node -d} '^{1-5}'
+ bspc {desktop -f,node -d} '^{1-5}'
 
 # Send focused window to another monitor
 0 + super
-	bspc node -m pointed
+ bspc node -m pointed
 
 # alternate between the tiled and monocle layout
 m + super
-	bspc desktop -l next
+ bspc desktop -l next
 
+
+
+super + o ; {e,w,m}
+ {gvim,firefox,thunderbird}
 #
 # state/flags
 #
 
 ## set the node flags
 #super + {m,x,y,z}
-#	bspc node -g {marked,locked,sticky,private}
+# bspc node -g {marked,locked,sticky,private}
