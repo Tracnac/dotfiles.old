@@ -1,0 +1,25 @@
+#!/usr/bin/env sh
+
+. "${HOME}/.profile"
+
+# load Xresources file
+xrdb -merge "${HOME}/.Xresources"
+xrdb -merge "${HOME}/.Xdefaults"
+
+# Return to safe value
+xbacklight -set 75%
+# wsconsctl display.brightness=33%
+xsetroot -cursor_name left_ptr
+
+# Thinkpad
+#xinput set-prop "/dev/wsmouse" "WS Pointer Wheel Emulation" 1 
+#xinput set-prop "/dev/wsmouse" "WS Pointer Wheel Emulation Button" 2 
+#xinput set-prop "/dev/wsmouse" "WS Pointer Wheel Emulation Axes" 6 7 4 5 
+
+# Background
+hsetroot -tile "${HOME}/.wallpaper.png"
+dbus-launch cwm
+
+# TODO
+# wsconsctl display.brightness=100%
+# wsconsctl keyboard.backlight=0%

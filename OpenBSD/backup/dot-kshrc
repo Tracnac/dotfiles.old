@@ -1,0 +1,40 @@
+case "$(command -v vim)" in
+  */vim) VIM=vim ;;
+  *)     VIM=vi  ;;
+esac
+
+export TZ=Europe/Paris
+export LANG=C.UTF-8
+
+export EDITOR=$VIM
+export FCEDIT=$EDITOR
+export PAGER=less
+export LESS='-iMRS -x2'
+export CLICOLOR=1
+HISTFILE="${HOME}/.ksh_history"
+HISTSIZE=32768
+
+set -o emacs
+
+if command -v colorls > /dev/null ; then
+  LS='colorls'
+else
+  LS='ls'
+fi
+
+alias ls="$LS -FHh"
+alias ll='ls -l'
+alias la='ls -lA'
+alias ..='cd ..'
+alias ...='cd ...'
+alias weather='curl https://wttr.in/Paris'
+alias svim="doas vim"
+alias svi="doas vi"
+
+export PS1="{\A} \u@\l [\W] \$ "
+
+if [ ! -z "${WINDOWID}" ]
+then
+  tmux ls > /dev/null 2>&1 || tmux new -s DBAdmin
+fi
+
